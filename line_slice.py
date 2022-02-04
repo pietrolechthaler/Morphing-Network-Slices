@@ -19,20 +19,20 @@ class TrafficSlicing(app_manager.RyuApp):
 
         # outport = self.mac_to_port[dpid][mac_address]
         self.mac_to_port = {
-            1: {"00:00:00:00:00:01": 1,
-                "00:00:00:00:00:02": 2,
+            1: {"00:00:00:00:00:01": 2,
+                "00:00:00:00:00:02": 1,
+                "00:00:00:00:00:03": 1,
+                "00:00:00:00:00:04": 1
+            },
+            2: {"00:00:00:00:00:01": 1,
+                "00:00:00:00:00:02": 3,
                 "00:00:00:00:00:03": 2,
                 "00:00:00:00:00:04": 2
             },
-            2: {"00:00:00:00:00:01": 1,
-                "00:00:00:00:00:02": 2,
-                "00:00:00:00:00:03": 3,
-                "00:00:00:00:00:04": 3
-            },
             3: {"00:00:00:00:00:01": 1,
                 "00:00:00:00:00:02": 1,
-                "00:00:00:00:00:03": 2,
-                "00:00:00:00:00:04": 3
+                "00:00:00:00:00:03": 3,
+                "00:00:00:00:00:04": 2
             },
             4: {"00:00:00:00:00:01": 1,
                 "00:00:00:00:00:02": 1,
@@ -41,10 +41,8 @@ class TrafficSlicing(app_manager.RyuApp):
             },
         }
         #self.slice_TCport = 9999
-
-        # outport = self.slice_ports[dpid][slicenumber]
-        self.slice_ports = {1: {1: 1, 2: 1}, 4: {1: 1, 2: 1}}
-        self.end_swtiches = [1, 4]
+        #outport = self.slice_ports[dpid][slicenumber]       
+        #self.end_swtiches = [1, 4]
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -89,6 +87,7 @@ class TrafficSlicing(app_manager.RyuApp):
     def _packet_in_handler(self, ev):
         msg = ev.msg
         datapath = msg.datapath
+        ofproto = datapath.ofproto
         in_port = msg.match["in_port"]
 
         pkt = packet.Packet(msg.data)
