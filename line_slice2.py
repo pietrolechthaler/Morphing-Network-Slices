@@ -23,7 +23,9 @@ class TrafficSlicing(app_manager.RyuApp):
             2: {"00:00:00:00:00:02": 3},
             3: {"00:00:00:00:00:03": 3},
             4: {"00:00:00:00:00:04": 2},
+            #4: {"00:00:00:00:00:05": 3},
         }
+
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -89,9 +91,9 @@ class TrafficSlicing(app_manager.RyuApp):
                 match = datapath.ofproto_parser.OFPMatch(eth_dst=dst)
                 self.add_flow(datapath, 1, match, actions)
                 self._send_package(msg, datapath, in_port, actions)
-        else:
-            out_port = ofproto.OFPP_FLOOD
-            actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
-            match = datapath.ofproto_parser.OFPMatch(in_port=in_port)
-            self.add_flow(datapath, 1, match, actions)
-            self._send_package(msg, datapath, in_port, actions)
+            else:
+                out_port = ofproto.OFPP_FLOOD
+                actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
+                match = datapath.ofproto_parser.OFPMatch(in_port=in_port)
+                self.add_flow(datapath, 1, match, actions)
+                self._send_package(msg, datapath, in_port, actions)
