@@ -101,10 +101,19 @@ class TrafficSlicing(app_manager.RyuApp):
 
         dpid = datapath.id
 
-        if dpid in self.mac_to_port:
-            if dst in self.mac_to_port[dpid]:
-                out_port = self.mac_to_port[dpid][dst]
-                actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
-                match = datapath.ofproto_parser.OFPMatch(eth_dst=dst)
-                self.add_flow(datapath, 1, match, actions)
-                self._send_package(msg, datapath, in_port, actions)
+        
+        if dst in self.mac_to_port[dpid]:
+            out_port = self.mac_to_port[dpid][dst]
+            actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
+            match = datapath.ofproto_parser.OFPMatch(eth_dst=dst)
+            self.add_flow(datapath, 1, match, actions)
+            self._send_package(msg, datapath, in_port, actions)
+            self.logger.info('utilizzato invio diretto')
+        else:
+            out_port = ofproto.OFPP_FLOOD
+            actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
+            match = datapath.ofproto_parser.OFPMatch(in_port=in_port)
+            self.mac_to_port[dpid][src] = in_port
+            self.logger.info('AGGIUNTA ROTTA DA {} per {} tramite {}'.format(dpid,src,in_port))
+            self._send_package(msg, datapath, in_port, actions)
+            self.logger.info('utilizzato invio flooding')
