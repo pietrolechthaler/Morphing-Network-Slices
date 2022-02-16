@@ -30,9 +30,14 @@ def addHost(net,name,index):
     )
 
 def addRouter(net,name,index):
+    if(index==4):
+        cacca="41"
+    else:
+        cacca=str(index)+str(index+1)
     return net.addHost(
         name,
         ip="10.0." + str(index) + ".254/24",
+        defaultRoute='via 10.0.'+(cacca)+'.2'
     )
   
 
@@ -40,7 +45,8 @@ def addHostR(net,name,index):
     return net.addHost(
         name,
         ip="10.0." + str(index) + ".1/24",
-        mac="00:00:00:00:00:0"+str(index)
+        mac="00:00:00:00:00:0"+str(index),
+        defaultRoute='via 10.0.'+str(index)+'.254'
     )
 
 

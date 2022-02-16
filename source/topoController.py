@@ -81,6 +81,15 @@ class TopoControllerRouters():
                     params2={'ip':'10.0.'+idrete+'.2/24'}
                 )
 
+            idrete = str(4)+str(1)
+            id1="r"+str(4)
+            id2="r"+str(1)
+            net.addLink(net.get(id1), net.get(id2),
+                intfName1=id1+"-eth1",
+                params1={'ip':'10.0.'+idrete+'.1/24'},
+                intfName2=id2+"-eth2",
+                params2={'ip':'10.0.'+idrete+'.2/24'}
+            )
             #net.build()
             #self.define_interfaces(net,index)
 
