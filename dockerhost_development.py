@@ -13,14 +13,16 @@ Tests:
 - Packet losses test with ping and increased link loss rate.
 """
 
+from pydoc import cli
 import comnetsemu.tool as tool
-from comnetsemu.net import Containernet
+from comnetsemu.net import Containernet, VNFManager
 from comnetsemu.node import DockerHost
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
-from mininet.node import Controller, OVSBridge, OVSKernelSwitch
+from mininet.node import Controller, OVSBridge, OVSSwitch
 from mininet.topo import Topo
 from mininet.cli import CLI
+import os, time
 
 PING_COUNT = 15
 
@@ -44,7 +46,12 @@ class EmptyTopo(Topo):
 def add_host(net, index):
     return net.addHost(
         "h" + str(index),
-        cls=DockerHost,
+        ip="10.0.0." + str(index) + "/24",
+    )
+
+def add_docker_host(net, index):
+    return net.addDockerHost(
+        "h" + str(index),
         dimage="dev_test",
         ip="10.0.0." + str(index) + "/24",
         docker_args={"cpuset_cpus": "0", "nano_cpus": int(1e8)},
@@ -78,7 +85,7 @@ def extend_topo(net):
     net.addSwitch("s5")
 
     info("\t adding hosts...\n")
-    add_host(net, 5)
+    add_docker_host(net, 5)
 
     info("\t adding links (1/2)...\n")
     net.addLink("h5", "s5")
@@ -91,7 +98,8 @@ if __name__ == "__main__":
     setLogLevel("info")
 
     info("[MAIN] Creating network\n")
-    net = Containernet(controller=Controller, link=TCLink, switch=OVSBridge, topo=EmptyTopo(), build=False)
+    net = Containernet(controller=Controller, link=TCLink, switch=OVSSwitch, topo=EmptyTopo(), build=False)
+    mgr = VNFManager(net)
     create_topo(net)
 
     info("[MAIN] Starting network\n")
@@ -112,6 +120,50 @@ if __name__ == "__main__":
     net.build()
     net.start()
     net.pingAll()
+    
+    info("########### - 1 - ###########\n")
 
-    info("[MAIN] Stopping network\n")
-    net.stop()
+    '''
+    #head = mgr.addContainer("head", "h1", "dev_test", "/bin/bash", docker_args={})
+    tail = mgr.addContainer(
+        "tail", "h5", "dev_test", "ping -c 3 10.0.0.1", docker_args={}
+    )
+
+    info("*** Tail start ping head, wait for 5s...")
+    #time.sleep(5)
+    info("\nThe ping result of tail to head: \n")
+    print(tail.dins.logs().decode("utf-8"))
+    mgr.removeContainer(tail.name)
+    #time.sleep(3)
+
+    '''
+    
+    info("LANCIO DOCKER")
+    head = mgr.addContainer(
+        "head",
+        "h5",
+        "dev_test",
+        "docker run -itd --net=host --name=ovs-vswitchd --volumes-from=ovsdb-server --privileged openvswitch/ovs: 2.11.2_debian ovs-vswitchd",
+        docker_args={}        
+    )
+
+    net.addLink("h5","s1")
+    net.addLink("h5","s3")
+
+    time.sleep(2)
+    net.get("h5").startShell()
+
+    info("########### - 2 - ###########\n")
+
+    info(str(dir(net)))
+    #info(str(dir(CLI.do_dump)))
+    #CLI.do_help(CLI,os)
+    #CLI.do_help()
+    CLI(net)
+    mgr.removeContainer(head.name)
+    #mgr.removeContainer(head.name)
+    info("########### - 3 - ###########\n")
+
+    info("[MAIN] Stopping network with clean script\n")
+    os.system('sudo ./clean.sh')
+    #net.stop()
