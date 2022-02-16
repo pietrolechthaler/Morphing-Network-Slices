@@ -123,35 +123,35 @@ if __name__ == "__main__":
     
     info("########### - 1 - ###########\n")
 
-    '''
+    
     #head = mgr.addContainer("head", "h1", "dev_test", "/bin/bash", docker_args={})
     tail = mgr.addContainer(
         "tail", "h5", "dev_test", "ping -c 3 10.0.0.1", docker_args={}
     )
 
     info("*** Tail start ping head, wait for 5s...")
-    #time.sleep(5)
+    time.sleep(5)
     info("\nThe ping result of tail to head: \n")
     print(tail.dins.logs().decode("utf-8"))
     mgr.removeContainer(tail.name)
-    #time.sleep(3)
+    time.sleep(3)
 
-    '''
+    
     
     info("LANCIO DOCKER")
-    head = mgr.addContainer(
-        "head",
-        "h5",
-        "dev_test",
-        "docker run -itd --net=host --name=ovs-vswitchd --volumes-from=ovsdb-server --privileged openvswitch/ovs: 2.11.2_debian ovs-vswitchd",
-        docker_args={}        
-    )
+    #head = mgr.addContainer(
+   #     "head",
+   #     "h5",
+   #     "dev_test",
+   #     "docker run -itd --net=host --name=ovs-vswitchd --volumes-from=ovsdb-server --privileged openvswitch/ovs: 2.11.2_debian ovs-vswitchd",
+    #    docker_args={}        
+    #)
 
     net.addLink("h5","s1")
     net.addLink("h5","s3")
 
     time.sleep(2)
-    net.get("h5").startShell()
+   # net.get("h5").startShell()
 
     info("########### - 2 - ###########\n")
 
