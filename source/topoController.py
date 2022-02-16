@@ -67,11 +67,19 @@ class TopoControllerRouters():
                 router=net.get(id)
                 router.cmd('sysctl net.ipv4.ip_forward=1')
                 net.addLink(net.get("h"+str(i+1)), router,
-                intfName2=id+"-eth0",
-                params2={'ip':'10.0.'+str(index)+'.254/24'}
+                    intfName2=id+"-eth0",
+                    params2={'ip':'10.0.'+str(index)+'.254/24'}
                 )
-            for i in range(1, index):
-                net.addLink(net.get("r"+str(i)), net.get("r"+str(i+1)))
+            for i in range(0, index-1):
+                idrete = str(i+1)+str(i+2)
+                id1="r"+str(i+1)
+                id2="r"+str(i+2)
+                net.addLink(net.get(id1), net.get(id2),
+                    intfName1=id1+"-eth1",
+                    params1={'ip':'10.0.'+idrete+'.1/24'},
+                    intfName2=id2+"-eth2",
+                    params2={'ip':'10.0.'+idrete+'.2/24'}
+                )
 
             #net.build()
             #self.define_interfaces(net,index)
