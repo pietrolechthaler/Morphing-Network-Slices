@@ -60,15 +60,21 @@ class TopoControllerRouters():
         if topology == "star":  ##TODO
             for i in range(0, len(net.hosts)):
                 net.addLink(net.hosts[i], net.switches[0])
-            
+ 
         elif topology == "string":
             for i in range(0, index):
                 id="r"+str(i+1)
                 router=net.get(id)
-                net.addLink(net.get("h"+str(i+1)), router)
-
+                router.cmd('sysctl net.ipv4.ip_forward=1')
+                net.addLink(net.get("h"+str(i+1)), router,
+                intfName2=id+"-eth0",
+                params2={'ip':'10.0.'+str(index)+'.254/24'}
+                )
             for i in range(1, index):
                 net.addLink(net.get("r"+str(i)), net.get("r"+str(i+1)))
+
+            #net.build()
+            #self.define_interfaces(net,index)
 
         elif topology == "ring":  ##TODO
             for i in range(0, len(net.hosts)):

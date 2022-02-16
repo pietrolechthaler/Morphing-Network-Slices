@@ -31,7 +31,8 @@ def addHost(net,name,index):
 
 def addRouter(net,name,index):
     return net.addHost(
-        name
+        name,
+        ip="10.0." + str(index) + ".254/24",
     )
   
 
@@ -39,6 +40,7 @@ def addHostR(net,name,index):
     return net.addHost(
         name,
         ip="10.0." + str(index) + ".1/24",
+        mac="00:00:00:00:00:0"+str(index)
     )
 
 
@@ -119,8 +121,9 @@ class NetControllerRouters():
         self.topoController = TopoControllerRouters()
         self.topoController.morph(self.net, "string",4)
         self.index = 0
-        self.net.build()
-        self.topoController.define_interfaces(self.net,4)
+        #self.net.build()
+        #c0.start()
+        #self.topoController.define_interfaces(self.net,4)
 
     def start(self):
         info("[NC] start\n")
