@@ -57,7 +57,7 @@ if __name__ == "__main__":
     #netController.stop()
     '''
 
-    netController = NetControllerRouters(4)
+    netController = NetController(4)
     netController.start()
     netController.CLI()
     netController.stop()
