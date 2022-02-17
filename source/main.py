@@ -3,21 +3,28 @@
 # vim:fenc=utf-8
 
 '''
-                   +-------+
-           +-------> Main  |
-           |       +---+---+
-           |           |
-           |           |
-           |   +-------v-------+
- Events----+   | NetController <---------Topologies
- - user        +-------+-------+
- - timers              |
-                       |            +--->Hosts
-               +-------v-------+    |
-               |TopoController +----+
-               +---------------+    |
-                                    +--->Switches
-'''
+                   ┌───────┐
+                   │ Main  │◄────── Events
+                   └───┬───┘        - User
+                       │            - Timers
+                       ▼
+               ┌───────────────┐
+               │ NetController │
+               └─┬───────────┬─┘
+                 │           │
+                 ▼           ▼
+┌────────────────────┐   ┌───────────────────┐
+│ TopologyController │   │ SlicingController │
+└──────────┬─────────┘   └────────┬──────────┘
+           │                      │
+           │                      │
+   Physical topology       Virtual topology
+           │                      │
+           │                      │
+           │      ┌─────────┐     │
+           └─────►│ Network │◄────┘
+                  └─────────┘
+ '''
 
 import os
 import time
