@@ -125,7 +125,7 @@ class NetControllerRouters():
             
         
         self.topoController = TopoControllerRouters()
-        self.topoController.morph(self.net, "string",4)
+        self.topoController.morph(self.net, "string",count)
         self.index = 0
         #self.net.build()
         #c0.start()
