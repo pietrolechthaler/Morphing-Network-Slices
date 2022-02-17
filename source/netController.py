@@ -30,14 +30,14 @@ def addHost(net,name,index):
     )
 
 def addRouter(net,name,index):
-    if(index==4):
-        cacca="41"
+    '''if(index==4):
+        reteAnello="41"
     else:
-        cacca=str(index)+str(index+1)
+        reteAnello=str(index)+str(index+1)'''
     return net.addHost(
         name,
-        ip="10.0." + str(index) + ".254/24",
-        defaultRoute='via 10.0.'+(cacca)+'.2'
+        ip="10.0." + str(index) + ".254/24"
+       # defaultRoute='via 10.0.'+(reteAnello)+'.2'
     )
   
 
@@ -87,10 +87,10 @@ class NetController():
     def deployVRouter(self):
         pass
 
-    def deployDockerHost(self,index):
+    def deployDockerHost(self,index,router):
         info("[NC] deploy Docker Host\n")
         addVirtualHost(self.net,"h"+str(index),index)
-        self.net.addLink("h"+str(index),"s4")
+        self.net.addLink("h"+str(index),router)
 
 
     def stop(self):
