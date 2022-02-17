@@ -8,6 +8,8 @@ from mininet.node import Controller, OVSBridge, OVSKernelSwitch
 from mininet.topo import Topo
 from mininet.cli import CLI
 
+from slicController import *
+
 class EmptyTopo(Topo):
     def build(self):
         pass
@@ -49,6 +51,8 @@ class TopoController():
 class TopoControllerRouters():
     def __init__(self):
         info("[TC] instance init\n")
+        
+        
     
     def morph(self, net, topology,index):
         info("[TC] morphing to " + str(topology) + "\n")
@@ -88,7 +92,6 @@ class TopoControllerRouters():
                     params2={'ip':'10.0.'+idrete+'.2/24'}
                 )
 
-
         elif topology == "ring":  
             for i in range(0, index):
                 id="r"+str(i+1)
@@ -118,19 +121,6 @@ class TopoControllerRouters():
                 intfName2=id2+"-eth2",
                 params2={'ip':'10.0.'+idrete+'.2/24'}
             )
-
-    def define_interfaces(self, net,index):
-        for i in range(0, index):
-            id="r"+str(i+1)
-            router=net.get(id)
-            router.cmd("ifconfig "+id+"-eth0 0")
-            router.cmd("ifconfig "+id+"-eth0 hw ether 00:00:00:00:0"+str(index+1)+":01")
-            router.cmd("ip addr add 10.0."+str(i+1)+".254/24 brd + dev "+id+"-eth0")
-
-
-
-    def morph_routes(self, net, router, routeOld, routeNew):
-        pass
         
         
         

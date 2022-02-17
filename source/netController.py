@@ -30,14 +30,9 @@ def addHost(net,name,index):
     )
 
 def addRouter(net,name,index):
-    '''if(index==4):
-        reteAnello="41"
-    else:
-        reteAnello=str(index)+str(index+1)'''
     return net.addHost(
         name,
         ip="10.0." + str(index) + ".254/24"
-       # defaultRoute='via 10.0.'+(reteAnello)+'.2'
     )
   
 
@@ -116,7 +111,7 @@ class NetControllerRouters():
     def __init__(self, count):
         info("[NC] instance init\n")
         self.net = Mininet(controller=Controller, link=TCLink, switch=OVSKernelSwitch, topo=EmptyTopo(), build=False)
-        
+        self.count = count
         c0 = self.net.addController("c0")
         for i in range(0, count):
             host = addHostR(self.net, "h" + str(i+1), i+1)
@@ -127,6 +122,7 @@ class NetControllerRouters():
         self.topoController = TopoControllerRouters()
         self.topoController.morph(self.net, "string",count)
         self.index = 0
+        self.slic = SlicControllerRouter()
         #self.net.build()
         #c0.start()
         #self.topoController.define_interfaces(self.net,4)
@@ -135,6 +131,7 @@ class NetControllerRouters():
         info("[NC] start\n")
         self.net.build()
         self.net.start()
+        self.slic.morph(self.net, "string", "string", self.count)
     
     '''def change(self):
         info("[NC] change\n")
