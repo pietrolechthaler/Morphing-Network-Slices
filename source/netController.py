@@ -8,7 +8,7 @@ from mininet.net import Mininet
 from comnetsemu.node import DockerHost
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
-from mininet.node import Controller, OVSBridge, OVSKernelSwitch
+from mininet.node import RemoteController, OVSBridge, OVSKernelSwitch
 from mininet.topo import Topo
 from mininet.cli import CLI
 
@@ -57,9 +57,10 @@ def addVirtualSwitch(net,name,index):
 class NetController():
     def __init__(self, count):
         info("[NC] instance init\n")
-        self.net = Mininet(controller=Controller, link=TCLink, switch=OVSKernelSwitch, topo=EmptyTopo(), build=False)
+        self.net = Mininet(link=TCLink, switch=OVSKernelSwitch, topo=EmptyTopo(), build=False)
         self.count = count
-        c0 = self.net.addController("c0")
+        c0 = RemoteController("c0", ip="127.0.0.1", port=6633)
+        self.net.addController(c0)
         for i in range(0, count):
             host = addHostR(self.net, "h" + str(i+1), i+1)
             id = "r" + str(i+1)
@@ -69,12 +70,12 @@ class NetController():
     
     def start(self):
         info("[NC] start\n")
-        self.topoController.morph(self.net, "ring", self.count)
+        self.topoController.morph(self.net, "string", self.count)
         self.net.build()
         self.net.start()
-        self.slic.morph(self.net, "ring", "string", self.count)
-        self.slic.collapseRouter(self.net, 2)
-        self.slic.morph(self.net, "ring", "ring", self.count)
+        #self.slic.morph(self.net, "ring", "string", self.count)
+        #self.slic.collapseRouter(self.net, 2)
+        #self.slic.morph(self.net, "ring", "ring", self.count)
         #self.test()
         #info("\n\n\n")
         #self.slic.morph2(self.net, "string", "string", self.count)

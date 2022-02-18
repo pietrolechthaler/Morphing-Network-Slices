@@ -20,13 +20,6 @@ class ExampleSwitch13(app_manager.RyuApp):
         self.mac_to_port = {}
 
 
-
-
-
-
-
-
-
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
         datapath = ev.msg.datapath
@@ -51,20 +44,6 @@ class ExampleSwitch13(app_manager.RyuApp):
             datapath=datapath, priority=priority, match=match, instructions=inst
         )
         datapath.send_msg(mod)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
