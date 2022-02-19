@@ -3,6 +3,7 @@
 # vim:fenc=utf-8
 
 '''
+DA RIFARE
                    ┌───────┐
                    │ Main  │◄────── Events
                    └───┬───┘        - User
@@ -34,31 +35,23 @@ from netController import *
 if __name__ == "__main__":
 
     setLogLevel("info")
-    ''''
-    netController = NetController(4)
+    
 
-    netController.start()
-    #netController.print()
-
-    info("####CHANGE####\n")
-    #netController.change()
-    #netController.test()
-    netController.deployDockerHost(5)
-    netController.start()
-
-
-    info("####TEST####\n")
-    #info(str(dir(netController.net.switches[0])))    
-    netController.test()
-    netController.CLI()
-
-    info("####CLEANUP####\n")
-    os.system('sudo ./clean.sh') 
-    #TODO: capire come mai non funziona la fermata di c0
-    #netController.stop()
-    '''
-    #subprocess.call('ryu-manager line_slice_circle.py', shell=True) -->quando non ci saranno debug useremo questo sistema
-    netController = NetController(4)
+    info("#### --- TOPOLOGIA A STRINGA --- ####\n")
+    os.system('ryu-manager ./SDN\ controller/controller_string.py &') 
+    netController = NetController(4, "string")
     netController.start()
     netController.CLI()
     netController.stop()
+
+    print("\n Premere invio per la modalità ad anello")
+    input()
+    os.system('./clean.sh')
+
+    info("\n\n#### --- TOPOLOGIA AD ANELLO --- ####\n")
+    os.system('ryu-manager ./SDN\ controller/controller_ring.py &') 
+    netController = NetController(4, "string")
+    netController.start()
+    netController.CLI()
+    netController.stop()
+    os.system('./clean.sh')
