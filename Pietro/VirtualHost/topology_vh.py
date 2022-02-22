@@ -80,13 +80,23 @@ if __name__ == "__main__":
             "openvswitch/ovs:2.11.2_debian",
             "docker run -itd --net=host --name=ovs-vswitchd --volumes-from=ovsdb-server --privileged openvswitch/ovs:2.11.2_debian ovs-vswitchd"
     )
+    print("*** Spawning XTerm")
+    #spawnXtermDocker("dh1_container") --> non faceva nulla, rimosso
+    print("*** Opening CLI")
 
-    spawnXtermDocker("dh1_container")
     CLI(net)
-    mgr.removeContainer("dh1_container")
-    mgr.removeContainer("dh2_container")
-    mgr.removeContainer("dh1")
-    mgr.removeContainer("dh2")
+
+    mgr.removeContainer(dh1_container.name)
+    mgr.removeContainer(dh2_container.name)
+
+    #non necessatio, mgr.stop ferma tutto da solo, ho letto dalla documentazione di
+    #comnets: riga 112 di questo link:
+    #https://git.comnets.net/public-repo/comnetsemu/-/blob/master/examples/dockerhost_manage_appcontainer.py
+    
+    #mgr.removeContainer("dh1_container")
+    #mgr.removeContainer("dh2_container")
+    #mgr.removeContainer("dh1")
+    #mgr.removeContainer("dh2")
 
 
     net.stop()    
