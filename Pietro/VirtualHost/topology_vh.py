@@ -31,6 +31,7 @@ if __name__ == "__main__":
             docker_args={"hostname": "dh1"},
     )
 
+    ##https://hub.docker.com/r/globocom/openvswitch/  --> alternativa
     dh2 = net.addDockerHost(
             "dh2",
             dimage="dev_test",
@@ -73,7 +74,7 @@ if __name__ == "__main__":
             "openvswitch/ovs:2.11.2_debian",
             "docker run -itd --net=host --name=ovs-vswitchd --volumes-from=ovsdb-server --privileged openvswitch/ovs:2.11.2_debian ovs-vswitchd"
     )
-
+    
     dh2_container = mgr.addContainer(
             "dh2_container",
             "dh2",
