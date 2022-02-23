@@ -1,25 +1,27 @@
-# Morphing Network Slicing
+# Morphing Network Slicing #
+Authors: Ascari Giacomo, Gatti Matteo, Lechthaler Pietro
 
-Authors: 
-Ascari Giacomo,
-Gatti Matteo,
-Lechthaler Pietro
+## Short Introduction ##
+In this project the goal is to show how a topology can be dynamically changed using a RYU SND controller.
 
-## CONTENUTI:
+This repository contains the following folders:
+1. /ryu-controller-solution: using RYU changes an initial physical string topology to a logical ring topology
+2. /ryu-controller-one-file: using RYU changes an initial physical string topology to a logical ring topology (all in one executable file)
+3. /ryu-controller-router: using RYU changes and a VirtualHost (Router) an initial physical string topology to a logical ring topology
+4. /routing-tables-solution: 
 
-### Controller-redirect
-morphing da stringa ad anello utilizzando il controller per il redirect delle porte, una volta raggiunto l'ultimo switch i messaggi venogno poi inviati al primo per ricominciare il giro, emulando quindi a tutti gli effetti una topologia ad anello pur avendo una topologia fisica sottostante a stringa
+## Topology Scheme ##
+![Topology](topology.png)
 
-```
-sudo python3 ./main.py
-```
+## Topology Slicing ##
+### How to Run ###
+### How to verify ###
 
-Viene avviato prima il controller "standard" per gestire la topologia a stringa, poi tramite ``` exit ``` usciamo da mininet e viene avviata la seconda situazione con il controller che gestisce l'anello. La topologia sottostante è invariata
+## Topology Slicing ##
+### How to Run ###
+### How to verify ###
 
+## Topology Slicing ##
+### How to Run ###
+### How to verify ###
 
-### Routing-tables solution
-morphing eseguito da un controller "ad hoc" e non da RYU, permette di fare morphing tra le topologie "string", "circle" e "star" a piacimento, utilizzandone una come topologia fisica e poi scegliendo quella logica.. soluzione basata sulla modifica delle tabelle di routing per instradamento dei pacchetti, da parte di "NetContoller" "TopoController" e "slicController" classi python da noi predisposte
-
-```
-sudo python3 ./main.py
-```
