@@ -1,8 +1,8 @@
 # Morphing Network Slicing
 
 Authors: 
-Ascari Giacomo
-Gatti Matteo
+Ascari Giacomo,
+Gatti Matteo,
 Lechthaler Pietro
 
 ## CONTENUTI:
