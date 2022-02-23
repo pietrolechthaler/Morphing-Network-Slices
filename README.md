@@ -13,7 +13,7 @@ This repository contains the following folders:
 ## Topology Scheme ##
 ![Topology](topology.png)
 
-## /ryu-controller-solution ##
+## Ryu-controller-solution ##
 ### How to Run ###
 You can simple run the emulation applications with following commands in ./ryu-controller-solution/SDN
 Enabling Ryu controller to load the application and to run background:
@@ -36,7 +36,7 @@ There are several modes to verify the results:
 2.  
 
 
-## /ryu-controller-one-file ##
+## Ryu-controller-one-file ##
 ### How to Run ###
 You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
 Enabling Ryu controller to load the application and to run background:
@@ -54,7 +54,7 @@ $ sudo python3 main.py
 ### How to verify ###
 Same of /ryu-controller-solution's verify process.
 
-## /ryu-controller-router ##
+## Ryu-controller-router ##
 ### How to Run ###
 You can simple run the emulation applications with following commands in ./ryu-controller-router/SDN
 Enabling Ryu controller to load the application and to run background:
@@ -71,7 +71,7 @@ $ sudo python3 topology.py
 ```
 ### How to verify ###
 
-## /routing-tables-solution ##
+## Routing-tables-solution ##
 ### How to Run ###
 ### How to verify ###
 
