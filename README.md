@@ -39,15 +39,7 @@ There are several modes to verify the results:
 ## Ryu-controller-one-file ##
 ### How to Run ###
 You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
-Enabling Ryu controller to load the application and to run background:
-```
-$ ryu-manager controller_ring.py &
-```
-or in alternative:
-```
-$ ryu-manager controller_string.py &
-```
-Starting the network with Mininet:
+Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
 ```
 $ sudo python3 main.py
 ```
@@ -56,7 +48,7 @@ Same of /ryu-controller-solution's verify process.
 
 ## Ryu-controller-router ##
 ### How to Run ###
-You can simple run the emulation applications with following commands in ./ryu-controller-router/SDN
+You can simply run the emulation applications with following commands in ./ryu-controller-router/SDN
 Enabling Ryu controller to load the application and to run background:
 ```
 $ ryu-manager controller_ring.py &
@@ -73,5 +65,10 @@ $ sudo python3 topology.py
 
 ## Routing-tables-solution ##
 ### How to Run ###
+You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
+Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
+```
+$ sudo python3 main.py
+```
 ### How to verify ###
-
+Same of /ryu-controller-solution's verify process.
