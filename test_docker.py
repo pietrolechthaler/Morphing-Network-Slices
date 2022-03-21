@@ -12,6 +12,7 @@ from mininet.node import RemoteController, Controller
 if __name__ == "__main__":
 
     print("*** Creating the net")
+
     net = Containernet(controller=Controller, link=TCLink, xterms=False, autoSetMacs=False)
     mgr = VNFManager(net)
     host_config = dict(inNamespace=True)
@@ -63,10 +64,6 @@ if __name__ == "__main__":
     
     print("*** Starting the network")
     net.start()
-    dh1.cmd('link dh1 s1 down')
-    dh1.cmd('link dh1 s4 down')
-    dh2.cmd('link dh2 s2 down')
-    dh2.cmd('link dh2 s3 down')
     
     
     print("*** Adding the Switch Container")
@@ -90,6 +87,7 @@ if __name__ == "__main__":
     mgr.removeContainer("dh2_container")
     mgr.removeContainer("dh1")
     mgr.removeContainer("dh2")
+
 
     net.stop()    
     mgr.stop()

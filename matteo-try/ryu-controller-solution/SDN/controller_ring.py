@@ -31,9 +31,9 @@ class MorphingSlice(app_manager.RyuApp):
         self.monitor_thread = hub.spawn(self.change)
 
     def change(self):
-        info("Controller starting up\n")
+        print("Controller starting up\n")
         time.sleep(20)
-        info("time to do some stuff\n")
+        print("time to do some stuff\n")
 
         switches = ['s1','s2','s3','s4']
 
@@ -48,9 +48,6 @@ class MorphingSlice(app_manager.RyuApp):
             check_output(shlex.split('sudo ovs-ofctl del-flows {} udp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} tcp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} icmp'.format(switch)),universal_newlines=True)
-            check_output(shlex.split('sudo ovs-ofctl del-flows {} '.format(switch)),universal_newlines=True)
-
-
         
         info("cancellato tutto,addios!\n")
 
