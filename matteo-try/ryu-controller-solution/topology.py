@@ -55,9 +55,9 @@ if __name__ == "__main__":
     net.addController(controller)
     net.build()
     net.start()
-    net.pingAll()
+    #net.pingAll()
     #da sistemare con il comando --> sudo ovs-ofctl mod-port s1 2 down
     #net.configLinkStatus('h1', 's1', 'down') --> questo spegne il collegamento fisico
-    net.pingAll()
+    #net.pingAll()
     CLI(net)
     net.stop()

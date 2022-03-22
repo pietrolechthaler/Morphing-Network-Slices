@@ -1,6 +1,7 @@
 from ryu.base import app_manager
 from ryu.controller import ofp_event
-from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER
+from ryu.controller import network
+from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER, HANDSHAKE_DISPATCHER, DEAD_DISPATCHER
 from ryu.controller.handler import set_ev_cls
 from ryu.ofproto import ofproto_v1_3
 from ryu.lib.packet import packet
@@ -13,11 +14,36 @@ from ryu.lib.packet import icmp
 from mininet.log import info, setLogLevel
 import shlex,time
 from subprocess import check_output
+import threading
 
 
 class ExampleSwitch13(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
 
+    def change(self):
+        while True:
+            time.sleep(10)
+            print("Rete Avviata\n")
+            for i in range(0,3):
+                print(f"Cambio rete in {(3-i)*20}")
+                time.sleep(20)
+            
+            check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 down'),universal_newlines=True)
+            print("-------------\n")
+            print("Rimosso Link tra S1 e S2!\n")
+            print("-------------\n")
+            
+
+            for i in range(0,3):
+                print(f"Cambio rete in {(3-i)*20}")
+                time.sleep(20)
+
+            check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 up'),universal_newlines=True)
+            print("-------------\n")
+            print("Ripristinato Link tra S1 e S2!\n")
+            print("-------------\n")    
+    
+    
     def __init__(self, *args, **kwargs):
         super(ExampleSwitch13, self).__init__(*args, **kwargs)
         # initialize mac address table.
@@ -27,13 +53,13 @@ class ExampleSwitch13(app_manager.RyuApp):
             3: {"00:00:00:00:00:03": 3},
             4: {"00:00:00:00:00:04": 2},
         }
-        self.monitor_thread = hub.spawn(self.change)
+        self.input_thread = threading.Thread(target=self.change)
+        self.input_thread.daemon = True
+        self.input_thread.start()
 
-    def change(self):
-        time.sleep(40)
-        print("Thread starting up - Accende porta\n")
-        check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 up'),universal_newlines=True)
-        print("Thread finito il lavoro\n")
+    @set_ev_cls(network.EventNetworkPort, [HANDSHAKE_DISPATCHER, CONFIG_DISPATCHER, MAIN_DISPATCHER, DEAD_DISPATCHER])
+    def test(self, ev):
+        print("EUREKA!\n")
 
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
