@@ -24,15 +24,17 @@ class ExampleSwitch13(app_manager.RyuApp):
         while True:
             time.sleep(10)
             print("Rete Avviata\n")
+            
+            #attesa 1 min
             for i in range(0,3):
                 print(f"Cambio rete in {(3-i)*20}")
-                time.sleep(20)
+                time.sleep(20)            
             
+            #spegnimento link
             check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 down'),universal_newlines=True)
             print("-------------\n")
             print("Rimosso Link tra S1 e S2!\n")
-            print("-------------\n")
-            
+            print("-------------\n")            
 
             for i in range(0,3):
                 print(f"Cambio rete in {(3-i)*20}")
@@ -42,6 +44,21 @@ class ExampleSwitch13(app_manager.RyuApp):
             print("-------------\n")
             print("Ripristinato Link tra S1 e S2!\n")
             print("-------------\n")    
+
+    
+    def change_topology(self, time):
+        while True:
+            #attendere 10 sec
+            #TODO: INFORMAZIONI DI RETE A "STRINGA"
+            #ovs-ofctl add-flow ecc
+            #spegnere le porte verso l'host virtuale
+            #attendere circa 1 min 
+
+            #TODO: INFORMAZIONI DI RETA A "ANELLO"
+            #ovs-ofctl remove old flows
+            #ovs-ofctl add flows
+            #accendere le porte verso il nuovo host
+            #ættendere
     
     
     def __init__(self, *args, **kwargs):
