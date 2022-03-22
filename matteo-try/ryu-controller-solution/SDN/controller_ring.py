@@ -14,12 +14,12 @@ from mininet.log import info, setLogLevel
 import shlex,time
 from subprocess import check_output
 
-class MorphingSlice(app_manager.RyuApp):
+
+class ExampleSwitch13(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
 
     def __init__(self, *args, **kwargs):
-        super(MorphingSlice, self).__init__(*args, **kwargs)
-        setLogLevel("info")
+        super(ExampleSwitch13, self).__init__(*args, **kwargs)
         # initialize mac address table.
         self.mac_to_port = {
             1: {"00:00:00:00:00:01": 2},
@@ -27,29 +27,14 @@ class MorphingSlice(app_manager.RyuApp):
             3: {"00:00:00:00:00:03": 3},
             4: {"00:00:00:00:00:04": 2},
         }
-
         self.monitor_thread = hub.spawn(self.change)
 
     def change(self):
-        print("Controller starting up\n")
-        time.sleep(20)
-        print("time to do some stuff\n")
+        time.sleep(40)
+        print("Thread starting up - Accende porta\n")
+        check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 up'),universal_newlines=True)
+        print("Thread finito il lavoro\n")
 
-        switches = ['s1','s2','s3','s4']
-
-        self.mac_to_port = { #1 appositamente sbagliato
-            1: {"00:00:00:00:00:01": 1},
-            2: {"00:00:00:00:00:02": 3},
-            3: {"00:00:00:00:00:03": 3},
-            4: {"00:00:00:00:00:04": 2},
-        }
-
-        for switch in switches:
-            check_output(shlex.split('sudo ovs-ofctl del-flows {} udp'.format(switch)),universal_newlines=True)
-            check_output(shlex.split('sudo ovs-ofctl del-flows {} tcp'.format(switch)),universal_newlines=True)
-            check_output(shlex.split('sudo ovs-ofctl del-flows {} icmp'.format(switch)),universal_newlines=True)
-        
-        info("cancellato tutto,addios!\n")
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -122,7 +107,7 @@ class MorphingSlice(app_manager.RyuApp):
             elif(dpid==4):
                 out_port=1
             else:
-                self.logger.info("nessuna delle opzioni")
+                #self.logger.info("nessuna delle opzioni")
                 out_port = ofproto.OFPP_FLOOD
                 
 
