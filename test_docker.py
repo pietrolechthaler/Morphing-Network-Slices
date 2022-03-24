@@ -27,8 +27,7 @@ if __name__ == "__main__":
     dh1 = net.addDockerHost(
             "dh1",
             dimage="dev_test",
-            ip="127.0.0.1/24",
-            docker_args={"hostname": "dh1"},
+            docker_args={"hostname": "h4"},
     )
 
     dh2 = net.addDockerHost(

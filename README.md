@@ -8,7 +8,7 @@ This repository contains the following folders:
 1. [/ryu-controller-solution](./ryu-controller-solution): using RYU changes an initial physical string topology to a logical ring topology
 2. [/ryu-controller-one-file](./ryu-controller-one-file): using RYU changes an initial physical string topology to a logical ring topology (all in one executable file)
 3. [/ryu-controller-router](./ryu-controller-router): using RYU changes and a VirtualHost (Router) an initial physical string topology to a logical ring topology
-4. [/routing-tables-solution](/routing-tables-solution): using automatically configured routing tablers (over SSH) mutating a physical string topology to a logical ring topology
+4. [/routing-tables-solution](/routing-tables-solution): 
 
 ## Topology Scheme ##
 ![Topology](topology.png)
