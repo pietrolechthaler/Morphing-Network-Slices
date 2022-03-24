@@ -10,6 +10,11 @@ from ryu.lib.packet import ether_types
 from ryu.lib.packet import udp
 from ryu.lib.packet import tcp
 from ryu.lib.packet import icmp
+from mininet.log import info, setLogLevel
+import shlex,time
+from subprocess import check_output
+from ryu.lib import hub
+
 
 class ExampleSwitch13(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -18,8 +23,43 @@ class ExampleSwitch13(app_manager.RyuApp):
         super(ExampleSwitch13, self).__init__(*args, **kwargs)
         # initialize mac address table.
         self.mac_to_port = {}
-        
+        self.monitor_thread = hub.spawn(self.change)
 
+    def change(self):
+        print("Controller starting up\n")
+        time.sleep(10)
+
+        check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 down'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl mod-port s4 3 down'),universal_newlines=True)
+        
+        time.sleep(60)
+        
+        check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 up'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl mod-port s4 3 up'),universal_newlines=True)
+        #check_output(shlex.split('sudo ovs-ofctl mod-port s2 3 down'),universal_newlines=True)
+        #check_output(shlex.split('sudo ovs-ofctl mod-port s2 2 down'),universal_newlines=True)
+
+        switches = ['s1','s2','s3','s4']
+        for switch in switches:
+            check_output(shlex.split('sudo ovs-ofctl del-flows {} udp'.format(switch)),universal_newlines=True)
+            check_output(shlex.split('sudo ovs-ofctl del-flows {} tcp'.format(switch)),universal_newlines=True)
+            check_output(shlex.split('sudo ovs-ofctl del-flows {} icmp'.format(switch)),universal_newlines=True)
+        
+        check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:01,actions=output:1'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl add-flow s2 dl_dst=00:00:00:00:00:02,actions=output:1'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl add-flow s3 dl_dst=00:00:00:00:00:03,actions=output:1'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl add-flow s4 dl_dst=00:00:00:00:00:04,actions=output:1'),universal_newlines=True)
+
+        check_output(shlex.split('sudo ovs-ofctl add-flow s1 in_port=3,actions=output:2'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl add-flow s2 in_port=2,actions=output:3'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl add-flow s3 in_port=2,actions=output:3'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl add-flow s4 in_port=2,actions=output:3'),universal_newlines=True)
+
+       
+
+
+           
+        print("topologia con hub spenti OK\n")
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -67,7 +107,7 @@ class ExampleSwitch13(app_manager.RyuApp):
         # get the received port number from packet_in message.
         in_port = msg.match['in_port']
 
-        self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
+        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
 
         # learn a mac address to avoid FLOOD next time.
         self.mac_to_port[dpid][src] = in_port
