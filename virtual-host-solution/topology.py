@@ -31,7 +31,7 @@ def four_switches_network():
     h4 = net.addHost('h4', mac='00:00:00:00:00:04')
 
     h5 = net.addHost('h5', mac='00:00:00:00:00:05')
-    #h6 = net.addHost('h6', mac='00:00:00:00:00:06')
+    h6 = net.addHost('h6', mac='00:00:00:00:00:06')
 
 
     s1 = net.addSwitch("s1")
@@ -50,8 +50,8 @@ def four_switches_network():
     
     net.addLink("s1", "h5")
     net.addLink("s4", "h5")
-    #net.addLink("s1", "h6")
-    #net.addLink("s3", "h6")
+    net.addLink("s1", "h6")
+    net.addLink("s3", "h6")
 
     info('*** Starting network\n')
     controller = RemoteController("c1", ip="127.0.0.1", port=6633)
@@ -66,13 +66,13 @@ def four_switches_network():
     h5.cmd("brctl addif br0 h5-eth2")
     h5.cmd("ifconfig br0 up")
 
-    # h6.cmd("ifconfig h6-eth0 0")
-    # h6.cmd("ifconfig h6-eth1 0")
-    # h6.cmd("brctl addbr br0")
-    # h6.cmd("brctl addif br0 h6-eth0")
-    # h6.cmd("brctl addif br0 h6-eth1")
-    # h6.cmd("brctl addif br0 h6-eth2")
-    # h6.cmd("ifconfig br0 up")
+    h6.cmd("ifconfig h6-eth0 0")
+    h6.cmd("ifconfig h6-eth1 0")
+    h6.cmd("brctl addbr br0")
+    h6.cmd("brctl addif br0 h6-eth0")
+    h6.cmd("brctl addif br0 h6-eth1")
+    h6.cmd("brctl addif br0 h6-eth2")
+    h6.cmd("ifconfig br0 up")
 
     CLI(net)
     net.stop()
