@@ -68,11 +68,11 @@ def four_switches_network():
 
     h6.cmd("ifconfig h6-eth0 0")
     h6.cmd("ifconfig h6-eth1 0")
-    h6.cmd("brctl addbr br0")
-    h6.cmd("brctl addif br0 h6-eth0")
-    h6.cmd("brctl addif br0 h6-eth1")
-    h6.cmd("brctl addif br0 h6-eth2")
-    h6.cmd("ifconfig br0 up")
+    h6.cmd("brctl addbr br1")
+    h6.cmd("brctl addif br1 h6-eth0")
+    h6.cmd("brctl addif br1 h6-eth1")
+    h6.cmd("brctl addif br1 h6-eth2")
+    h6.cmd("ifconfig br1 up")
 
     CLI(net)
     net.stop()
