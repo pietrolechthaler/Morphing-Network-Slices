@@ -32,13 +32,12 @@ class ExampleSwitch13(app_manager.RyuApp):
         print("Controller starting up\n")
         time.sleep(10)
 
-        # check_output(shlex.split('sudo ovs-ofctl mod-port s2 3 down'),universal_newlines=True)  #down porte s2 e porte altri switch collegati a s2
-        # check_output(shlex.split('sudo ovs-ofctl mod-port s2 2 down'),universal_newlines=True)  
-        # check_output(shlex.split('sudo ovs-ofctl mod-port s2 1 down'),universal_newlines=True)  
-        # check_output(shlex.split('sudo ovs-ofctl mod-port s3 2 down'),universal_newlines=True)  
-        # check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 down'),universal_newlines=True)  
-        check_output(shlex.split('sudo ovs-ofctl mod-port s3 4 down'),universal_newlines=True)  
-        check_output(shlex.split('sudo ovs-ofctl mod-port s1 4 down'),universal_newlines=True)  
+        check_output(shlex.split('sudo ovs-ofctl mod-port s2 3 down'),universal_newlines=True)  #down porte s2 e porte altri switch collegati a s2
+        check_output(shlex.split('sudo ovs-ofctl mod-port s2 2 down'),universal_newlines=True)  
+        check_output(shlex.split('sudo ovs-ofctl mod-port s2 1 down'),universal_newlines=True)  
+        check_output(shlex.split('sudo ovs-ofctl mod-port s3 2 down'),universal_newlines=True)  
+        check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 down'),universal_newlines=True)  
+
 
         
         time.sleep(5)
@@ -137,16 +136,6 @@ class ExampleSwitch13(app_manager.RyuApp):
         in_port = msg.match['in_port']
 
         #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
-        if(dst=="00:00:00:00:00:05"):
-            print("sono dentro h5")
-            return
-        print("non è uscito")
-        if(dst=="00:00:00:00:00:06"):
-            print("sono dentro h6")
-            return
-        print("non è uscito")
-
-        
         results=0
         # learn a mac address to avoid FLOOD next time.
         #self.mac_to_port[dpid][src] = in_port
@@ -154,21 +143,27 @@ class ExampleSwitch13(app_manager.RyuApp):
         # if the destination mac address is already learned,
         # decide which port to output the packet, otherwise FLOOD.
         if dst in self.mac_to_port[dpid]:
-            self.logger.info("MAC: sono dentro %s %s %s %s", dpid, src, dst, in_port)
+            #self.logger.info("MAC: sono dentro %s %s %s %s", dpid, src, dst, in_port)
             out_port = self.mac_to_port[dpid][dst]
             results=1
         else:
             if(dpid==1):
-                out_port=2 #h6 --> hub tra s1 e s3
+                out_port=4 #h6 --> hub tra s1 e s3
             #     #self.logger.info("1. packet in %s %s %s %s", dpid, src, dst, in_port)
             elif(dpid==2):
-                out_port=3 #solo per evitare comportamenti scorretti
+                out_port=1 #solo per evitare comportamenti scorretti
             #     #self.logger.info("2. packet in %s %s %s %s", dpid, src, dst, in_port)
             elif(dpid==3):
                 out_port=3 #s4
             #     #self.logger.info("3. packet in %s %s %s %s", dpid, src, dst, in_port)
             elif(dpid==4):
                  out_port=3 #h5 --> hub tra s4 e s1
+            #     #self.logger.info("4. packet in %s %s %s %s", dpid, src, dst, in_port)
+            elif(dpid==5):
+                 out_port=1 #h5 --> hub tra s4 e s1
+            #     #self.logger.info("4. packet in %s %s %s %s", dpid, src, dst, in_port)
+            elif(dpid==6):
+                 out_port=2 #h5 --> hub tra s4 e s1
             #     #self.logger.info("4. packet in %s %s %s %s", dpid, src, dst, in_port)
             else:
                 return
