@@ -22,14 +22,15 @@ def four_switches_network():
         autoSetMacs=True,
         autoStaticArp=True,
         link=TCLink)
-                   
-
+    
+    # Create host nodes
     info('*** Add switches\n')
     h1 = net.addHost('h1', mac='00:00:00:00:00:01')
     h2 = net.addHost('h2', mac='00:00:00:00:00:02')
     h3 = net.addHost('h3', mac='00:00:00:00:00:03')
     h4 = net.addHost('h4', mac='00:00:00:00:00:04')
 
+    # Create virtual host nodes
     h5 = net.addHost('h5', mac='00:00:00:00:00:05')
     h6 = net.addHost('h6', mac='00:00:00:00:00:06')
 
@@ -38,7 +39,8 @@ def four_switches_network():
     s2 = net.addSwitch("s2")
     s3 = net.addSwitch("s3")
     s4 = net.addSwitch("s4")
-
+    
+    # Add switch links
     net.addLink("h1", "s1")
     net.addLink("h2", "s2")
     net.addLink("h3", "s3")
@@ -48,6 +50,7 @@ def four_switches_network():
     net.addLink("s2", "s3")
     net.addLink("s3", "s4")
     
+    # Add virtual host links
     net.addLink("s1", "h5")
     net.addLink("s4", "h5")
     net.addLink("s1", "h6")
@@ -58,6 +61,7 @@ def four_switches_network():
     net.addController(controller)
     net.build()
     net.start()
+    # Hub configuration between s1 and s4 
     h5.cmd("ifconfig h5-eth0 0")
     h5.cmd("ifconfig h5-eth1 0")
     h5.cmd("brctl addbr br0")
@@ -65,6 +69,7 @@ def four_switches_network():
     h5.cmd("brctl addif br0 h5-eth1")
     h5.cmd("ifconfig br0 up")
 
+    # Hub configuration between s1 and s4 
     h6.cmd("ifconfig h6-eth0 0")
     h6.cmd("ifconfig h6-eth1 0")
     h6.cmd("brctl addbr br0")

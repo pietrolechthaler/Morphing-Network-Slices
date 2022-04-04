@@ -73,9 +73,9 @@ class ExampleSwitch13(app_manager.RyuApp):
 
         self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
 
+        # results = 0 means destination mac address is not in the mac address table
+        # results = 1 means destination mac address is in the mac address table
         results=0
-        # learn a mac address to avoid FLOOD next time.
-        #self.mac_to_port[dpid][src] = in_port
 
         # if the destination mac address is already learned,
         # decide which port to output the packet, otherwise FLOOD.
@@ -103,7 +103,7 @@ class ExampleSwitch13(app_manager.RyuApp):
         # construct action list.
         actions = [parser.OFPActionOutput(out_port)]
 
-        # install a flow to avoid packet_in next time.
+        # install a flow only if out port is different of OFPP_FLOOD and mac address is in the table
         if (out_port != ofproto.OFPP_FLOOD and results==1):
             match = parser.OFPMatch(in_port=in_port, eth_dst=dst)
             self.add_flow(datapath, 1, match, actions)

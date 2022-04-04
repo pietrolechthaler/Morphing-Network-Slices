@@ -28,26 +28,31 @@ class ExampleSwitch13(app_manager.RyuApp):
             3: {"00:00:00:00:00:03": 1},
             4: {"00:00:00:00:00:04": 1},
         }        
-        #self.monitor_thread = hub.spawn(self.change)
-        print("Controller starting up\n")
-        time.sleep(10)
 
+        print("Controller starting up\n")
+
+        #Start string topology
+        time.sleep(10)
         # check_output(shlex.split('sudo ovs-ofctl mod-port s2 3 down'),universal_newlines=True)  #down porte s2 e porte altri switch collegati a s2
         # check_output(shlex.split('sudo ovs-ofctl mod-port s2 2 down'),universal_newlines=True)  
         # check_output(shlex.split('sudo ovs-ofctl mod-port s2 1 down'),universal_newlines=True)  
         # check_output(shlex.split('sudo ovs-ofctl mod-port s3 2 down'),universal_newlines=True)  
         # check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 down'),universal_newlines=True)  
+
         check_output(shlex.split('sudo ovs-ofctl mod-port s3 4 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s1 4 down'),universal_newlines=True)  
 
         
         time.sleep(5)
-        switches = ['s1','s2','s3','s4']    #cancello eventuali match sbagliati dovuti al collegamento iniziale con gli hub
+        # Removing Switch Routing Table Entries
+        switches = ['s1','s2','s3','s4']
         for switch in switches:
             check_output(shlex.split('sudo ovs-ofctl del-flows {} udp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} tcp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} icmp'.format(switch)),universal_newlines=True)
-        print("TOPOLOGIA AD ANELLO S1-S2-S3-S4")
+        
+        #Dinamically change topology from string to ring
+        print("Ring Topology S1-S2-S3-S4")
         self.mac_to_port = {
             1: {"00:00:00:00:00:01": 1},
             2: {"00:00:00:00:00:02": 1},
@@ -136,44 +141,26 @@ class ExampleSwitch13(app_manager.RyuApp):
         # get the received port number from packet_in message.
         in_port = msg.match['in_port']
 
-        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
-        if(dst=="00:00:00:00:00:05"):
-            print("sono dentro h5")
-            return
-        print("non è uscito")
-        if(dst=="00:00:00:00:00:06"):
-            print("sono dentro h6")
-            return
-        print("non è uscito")
-
-        
+    
         results=0
-        # learn a mac address to avoid FLOOD next time.
-        #self.mac_to_port[dpid][src] = in_port
 
         # if the destination mac address is already learned,
         # decide which port to output the packet, otherwise FLOOD.
         if dst in self.mac_to_port[dpid]:
-            self.logger.info("MAC: sono dentro %s %s %s %s", dpid, src, dst, in_port)
             out_port = self.mac_to_port[dpid][dst]
             results=1
         else:
             if(dpid==1):
-                out_port=2 #h6 --> hub tra s1 e s3
-            #     #self.logger.info("1. packet in %s %s %s %s", dpid, src, dst, in_port)
+                out_port=2 #h6 --> hub between s1 and s3
             elif(dpid==2):
-                out_port=3 #solo per evitare comportamenti scorretti
-            #     #self.logger.info("2. packet in %s %s %s %s", dpid, src, dst, in_port)
+                out_port=3 #only for debugging (s2 is off)
             elif(dpid==3):
                 out_port=3 #s4
-            #     #self.logger.info("3. packet in %s %s %s %s", dpid, src, dst, in_port)
             elif(dpid==4):
-                 out_port=3 #h5 --> hub tra s4 e s1
-            #     #self.logger.info("4. packet in %s %s %s %s", dpid, src, dst, in_port)
+                 out_port=3 #h5 --> hub between s4 and s1
             else:
                 return
-                #self.logger.info("NN. packet in %s %s %s %s", dpid, src, dst, in_port)
-
+        
         # construct action list.
         actions = [parser.OFPActionOutput(out_port)]
 

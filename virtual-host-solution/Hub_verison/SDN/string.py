@@ -25,7 +25,7 @@ class ExampleSwitch13(app_manager.RyuApp):
         self.mac_to_port = {}
         print("Controller starting up\n")
         time.sleep(10)
-
+        
         check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 down'),universal_newlines=True)  #down porte estreme collegate agli hub
         check_output(shlex.split('sudo ovs-ofctl mod-port s4 3 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s1 4 down'),universal_newlines=True)

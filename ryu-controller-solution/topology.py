@@ -15,7 +15,6 @@ class NetworkSlicingTopo(Topo):
         # Create template host, switch, and link
         host_config = dict(inNamespace=True)
         http_link_config = dict(bw=1)
-        video_link_config = dict(bw=10)
         host_link_config = dict()
 
         # Create switch nodes
