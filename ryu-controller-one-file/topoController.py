@@ -8,6 +8,8 @@ from mininet.node import Controller, OVSBridge, OVSKernelSwitch
 from mininet.topo import Topo
 from mininet.cli import CLI
 
+#this class creates the actual links between hosts and netw. devices based on what physical topology we passed initially.
+
 class EmptyTopo(Topo):
     def build(self):
         pass

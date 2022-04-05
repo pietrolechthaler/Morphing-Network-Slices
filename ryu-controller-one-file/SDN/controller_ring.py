@@ -11,6 +11,9 @@ from ryu.lib.packet import udp
 from ryu.lib.packet import tcp
 from ryu.lib.packet import icmp
 
+#for a precise description of this class see the version in /controller-solution
+
+
 class ExampleSwitch13(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
 
@@ -68,17 +71,10 @@ class ExampleSwitch13(app_manager.RyuApp):
         dst = eth_pkt.dst
         src = eth_pkt.src
 
-        # get the received port number from packet_in message.
         in_port = msg.match['in_port']
 
-        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
-
         results=0
-        # learn a mac address to avoid FLOOD next time.
-        #self.mac_to_port[dpid][src] = in_port
-
-        # if the destination mac address is already learned,
-        # decide which port to output the packet, otherwise FLOOD.
+        
         if dst in self.mac_to_port[dpid]:
             out_port = self.mac_to_port[dpid][dst]
             results=1

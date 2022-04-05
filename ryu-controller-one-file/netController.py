@@ -14,6 +14,7 @@ from mininet.cli import CLI
 
 from topoController import *
 
+#method to add a virtual host to the net
 def addVirtualHost(net, name, index):
     return net.addHost(
         name,
@@ -22,7 +23,7 @@ def addVirtualHost(net, name, index):
         ip="10.0.0." + str(index) + "/24",
         docker_args={"cpuset_cpus": "0", "nano_cpus": int(1e8)},
     )
-
+#method to add a classic host to the net
 def addHost(net,name,index):
     return net.addHost(
         name,
@@ -31,27 +32,29 @@ def addHost(net,name,index):
     )
 
 class NetController():
+    #topology param is the actual physical topology we want, string or ring
     def __init__(self, count, topology):
         info("[NC] instance init\n")
         self.net = Mininet(controller=RemoteController, 
         link=TCLink, switch=OVSKernelSwitch, topo=EmptyTopo(), 
-        build=False,autoSetMacs=True,
+        build=False,autoSetMacs=True,   #for some reason this was very important for the network to work!
         autoStaticArp=True)
         
-        #self.net.addController("c0")
         for i in range(0, count):
             addHost(self.net, "h" + str(i+1), i+1)
             self.net.addSwitch("s" + str(i+1))
         
         self.topoController = TopoController()
-        self.topoController.morph(self.net, topology)
+        self.topoController.morph(self.net, topology)   #topology controller will had the correct links
         self.index = 0
 
+    #method to start the net
     def start(self):
         info("[NC] start\n")
         self.net.build()
         self.net.start()
-    
+
+    #method to change topology, cycling through the list: star,ring,string
     def change(self):
         info("[NC] change\n")
         topologies = ["star", "ring", "string"]
@@ -60,21 +63,18 @@ class NetController():
         self.net.build()
         self.net.start()
 
-    def collapseSwitch(self,index):
-        pass
-
-    def deployVRouter(self):
-        pass
-
+    #deploy method, unused since we couldn't benefit from "deploying" from the controller
     def deployDockerHost(self,index,router):
         info("[NC] deploy Docker Host\n")
         addVirtualHost(self.net,"h"+str(index),index)
         self.net.addLink("h"+str(index),router)
 
+    #method to stop the network
     def stop(self):
         info("[NC] stop\n")
         self.net.stop()
     
+    #debug print
     def print(self):
         info("Controllers: " + str(self.net.controllers) + "\n")
         info("Hosts: " + str(self.net.hosts) + "\n")
