@@ -111,8 +111,11 @@ You can simple run the emulation applications with following commands in ./ryu-c
 $ cd ryu-controller-one-file
 $ sudo python3 main.py
 ```
-There are several modes to verify the results:
-2.  try ping all:  ```  mininet> pingall``` : this should work fine with string topology and show an X when reaching H2 in ring topology (since we excluded that Switch)
+
+To verify, try ping all:  ```  mininet> pingall``` 
+
+this should work fine with string topology and show an X when reaching H2 in ring topology (since we excluded that Switch).
+
 Since this example is running on one file only, after exiting the first example you'll go to the second one and the pingall comand should work differently!
 
 ### Virtual-host-solution
