@@ -5,7 +5,7 @@
   <h2 align="center">Morphing Network Slicing</h2>
 
   <p align="center">
-  Ascari Giacomo, Gatti Matteo, Lechthaler Pietro
+    Softwarized and Virtualized Mobile Networks
   <br>
   </p>
 </p>
