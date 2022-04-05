@@ -1,22 +1,82 @@
-# Morphing Network Slicing #
-Authors: Ascari Giacomo, Gatti Matteo, Lechthaler Pietro
+<p align="center">
+  <a href="">
+    <img src="https://github.com/pietrolechthaler/UniT-MorphingNetworkSlices/blob/main/logo.png" width=230 height=150>
+  </a>
+  <h2 align="center">Morphing Network Slicing</h2>
 
-## Short Introduction ##
+  <p align="center">
+  Ascari Giacomo, Gatti Matteo, Lechthaler Pietro
+  <br>
+  </p>
+</p>
+<br>
+
+## Table of contents
+- [Description](#description)
+- [Download](#dowload)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributors](#contributors)
+
+<hr>
+
+### Description
+
 In this project the goal is to show how a topology can be dynamically changed using a RYU SND controller.
 
-This repository contains the following folders:
-1. [/ryu-controller-solution](./ryu-controller-solution): using RYU changes an initial physical string topology to a logical ring topology
-2. [/ryu-controller-one-file](./ryu-controller-one-file): using RYU changes an initial physical string topology to a logical ring topology (all in one executable file)
-3. [/ryu-controller-router](./ryu-controller-router): using RYU changes and a VirtualHost (Router) an initial physical string topology to a logical ring topology
-4. [/routing-tables-solution](/routing-tables-solution): 
+[inserire topologia e spiegazione della nostra idea]
 
-## Topology Scheme ##
-![Topology](topology.png)
+<hr>
 
-## Ryu-controller-solution ##
-### How to Run ###
+### Dowload
+
+```
+git clone https://github.com/pietrolechthaler/UniTn-MorphingNetworkSlices
+```
+
+<hr>
+
+### Intallation
+
+After downloading all the files and installing the [ComNetsEmu](https://git.comnets.net/public-repo/comnetsemu/-/tree/master) virtual emulator.
+
+```
+cd UniTn-MorphingNetworkSlices
+```
+
+
+<hr>
+
+### Usage 
+
+This repository contains the following folders which contain **four different implementations of the solution** and a **testing folder** with some ideas of possible solutions.
+
+```
+UniTn-MorphingNetworkSlices
+├── routing-tables-solution
+├── ryu-controller-solution
+├── ryu-controller-one-file
+├── virtual-host-solution
+├── testing
+```
+<hr>
+
+### Routing-tables-solution ###
+You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
+Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
+```
+$ sudo python3 main.py
+```
+There are several modes to verify the results:
+1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
+2.  
+
+### Ryu-controller-solution
+
 You can simple run the emulation applications with following commands in ./ryu-controller-solution/SDN
-Enabling Ryu controller to load the application and to run background:
+
+<br>Enabling Ryu controller to load the application and to run background:
+
 ```
 $ ryu-manager controller_ring.py &
 ```
@@ -29,25 +89,22 @@ Starting the network with Mininet:
 $ sudo python3 topology.py
 ```
 
-
-### How to verify ###
 There are several modes to verify the results:
 1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
 2.  
 
 
-## Ryu-controller-one-file ##
-### How to Run ###
+### Ryu-controller-one-file
 You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
 Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
 ```
 $ sudo python3 main.py
 ```
-### How to verify ###
-Same of /ryu-controller-solution's verify process.
+There are several modes to verify the results:
+1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
+2.  
 
-## Ryu-controller-router ##
-### How to Run ###
+### Virtual-host-solution
 You can simply run the emulation applications with following commands in ./ryu-controller-router/SDN
 Enabling Ryu controller to load the application and to run background:
 ```
@@ -61,14 +118,13 @@ Starting the network with Mininet:
 ```
 $ sudo python3 topology.py
 ```
-### How to verify ###
+There are several modes to verify the results:
+1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
+2.  
 
-## Routing-tables-solution ##
-### How to Run ###
-You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
-Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
-```
-$ sudo python3 main.py
-```
-### How to verify ###
-Same of /ryu-controller-solution's verify process.
+<hr>
+
+### Contributors
+* [Ascari Giacomo](https://github.com/giacomo-ascari)
+* [Gatti Matteo](https://github.com/matteo-gatti)
+* [Lechthaler Pietro](https://github.com/pietrolechthaler)
