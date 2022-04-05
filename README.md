@@ -1,6 +1,6 @@
 <p align="center">
   <a href="">
-    <img src="https://github.com/pietrolechthaler/UniT-MorphingNetworkSlices/blob/main/logo.png">
+    <img src="https://github.com/pietrolechthaler/UniTn-MorphingNetworkSlices/blob/main/logo.png">
   </a>
   <h2 align="center">Morphing Network Slicing</h2>
 
