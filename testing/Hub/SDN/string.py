@@ -5,7 +5,7 @@ from ryu.controller.handler import set_ev_cls
 from ryu.ofproto import ofproto_v1_3
 from ryu.lib.packet import packet
 from ryu.lib.packet import ethernet
-from ryu.lib import hub
+from ryu.lib.packet import ethernet
 from ryu.lib.packet import ether_types
 from ryu.lib.packet import udp
 from ryu.lib.packet import tcp
@@ -13,6 +13,7 @@ from ryu.lib.packet import icmp
 from mininet.log import info, setLogLevel
 import shlex,time
 from subprocess import check_output
+from ryu.lib import hub
 
 
 class ExampleSwitch13(app_manager.RyuApp):
@@ -21,24 +22,35 @@ class ExampleSwitch13(app_manager.RyuApp):
     def __init__(self, *args, **kwargs):
         super(ExampleSwitch13, self).__init__(*args, **kwargs)
         # initialize mac address table.
-        self.mac_to_port = {
-            1: {"00:00:00:00:00:01": 2},
-            2: {"00:00:00:00:00:02": 3},
-            3: {"00:00:00:00:00:03": 3},
-            4: {"00:00:00:00:00:04": 2},
-        }
-        self.monitor_thread = hub.spawn(self.change)
+        self.mac_to_port = {}
+        print("Controller starting up\n")
+        time.sleep(10)
+        
+        check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 down'),universal_newlines=True)  #down porte estreme collegate agli hub
+        check_output(shlex.split('sudo ovs-ofctl mod-port s4 3 down'),universal_newlines=True)  
+        check_output(shlex.split('sudo ovs-ofctl mod-port s1 4 down'),universal_newlines=True)
+        check_output(shlex.split('sudo ovs-ofctl mod-port s3 4 down'),universal_newlines=True)
+        
+        time.sleep(5)
+        switches = ['s1','s2','s3','s4']    #cancello eventuali match sbagliati dovuti al collegamento iniziale con gli hub
+        for switch in switches:
+            check_output(shlex.split('sudo ovs-ofctl del-flows {} udp'.format(switch)),universal_newlines=True)
+            check_output(shlex.split('sudo ovs-ofctl del-flows {} tcp'.format(switch)),universal_newlines=True)
+            check_output(shlex.split('sudo ovs-ofctl del-flows {} icmp'.format(switch)),universal_newlines=True)
+        self.mac_to_port = {}
 
-    def change(self):
-        time.sleep(4)
-        print("Thread starting up - Accende porta\n")
-        check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 down'),universal_newlines=True)
-        check_output(shlex.split('sudo ovs-ofctl mod-port s4 3 down'),universal_newlines=True)
-        time.sleep(40)
-        check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 up'),universal_newlines=True)
-        check_output(shlex.split('sudo ovs-ofctl mod-port s4 3 up'),universal_newlines=True)
-        print("Thread finito il lavoro\n")
+        print("TOPOLOGIA A STRINGA S1-S2-S3-S4")
+        #print("------------")
+        # print(check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:01,actions=output:1'),universal_newlines=True))    #dump table pre cancellazione
+        # print(check_output(shlex.split('sudo ovs-ofctl dump-flows s2'),universal_newlines=True))    #dump table pre cancellazione
+        # print(check_output(shlex.split('sudo ovs-ofctl dump-flows s3'),universal_newlines=True))    #dump table pre cancellazione
+        # print(check_output(shlex.split('sudo ovs-ofctl dump-flows s4'),universal_newlines=True))    #dump table pre cancellazione
+        # print("-------------")
+       
+       # self.monitor_thread = hub.spawn(self.change)
 
+    #def change(self):
+       
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
         datapath = ev.msg.datapath
@@ -86,39 +98,24 @@ class ExampleSwitch13(app_manager.RyuApp):
         in_port = msg.match['in_port']
 
         #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
-
         results=0
         # learn a mac address to avoid FLOOD next time.
-        #self.mac_to_port[dpid][src] = in_port
+        
 
         # if the destination mac address is already learned,
         # decide which port to output the packet, otherwise FLOOD.
+        self.mac_to_port[dpid][src] = in_port
         if dst in self.mac_to_port[dpid]:
             out_port = self.mac_to_port[dpid][dst]
-            results=1
         else:
-            if(dpid==1):
-                out_port=1
-            elif(dpid==2 and in_port==1):
-                out_port=2
-            elif(dpid==2 and in_port==2):
-                out_port=1
-            elif(dpid==3 and in_port==1):
-                out_port=2
-            elif(dpid==3 and in_port==2):
-                out_port=1
-            elif(dpid==4):
-                out_port=1
-            else:
-                #self.logger.info("nessuna delle opzioni")
-                out_port = ofproto.OFPP_FLOOD
-                
+            out_port = ofproto.OFPP_FLOOD
 
         # construct action list.
         actions = [parser.OFPActionOutput(out_port)]
 
         # install a flow to avoid packet_in next time.
-        if (out_port != ofproto.OFPP_FLOOD and results==1):
+        if (out_port != ofproto.OFPP_FLOOD):
+            #if ((self.mode == "RING" and results==1) or self.mode == "STRING"):
             match = parser.OFPMatch(in_port=in_port, eth_dst=dst)
             self.add_flow(datapath, 1, match, actions)
 
