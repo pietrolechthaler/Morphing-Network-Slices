@@ -113,22 +113,16 @@ There are several modes to verify the results:
 You can simply run the emulation applications with following commands in ./virtual-host-solution/
 Enabling Ryu controller to load the application and to run background:
 <br>
-* **Switch**
 ```
-$ cd Virtual-host-solution/Switch_version/SDN
-$ ryu-manager controller.py &
-```
-
-* **Hub (not working)**
-```
-$ cd Virtual-host-solution/Hub_version/SDN
+$ cd Virtual-host-solution/SDN
 $ ryu-manager controller.py &
 ```
 Starting the network with Mininet:
 ```
-$ cd Virtual-host-solution/<VERSION>/SDN
+$ cd Virtual-host-solution
 $ sudo python3 topology.py
 ```
+
 <hr>
 
 ### Contributors
