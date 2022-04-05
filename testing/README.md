@@ -1,74 +1,26 @@
-# Morphing Network Slicing #
-Authors: Ascari Giacomo, Gatti Matteo, Lechthaler Pietro
+<p align="center">
+  <a href="">
+    <img src="https://github.com/pietrolechthaler/UniTn-MorphingNetworkSlices/blob/main/logo.png">
+  </a>
+  <h2 align="center">Morphing Network Slicing</h2>
 
-## Short Introduction ##
-In this project the goal is to show how a topology can be dynamically changed using a RYU SND controller.
+  <p align="center">
+  Exam project for Softwarized and Virtualized Mobile Networks 
+  <br>University of Trento - Prof. <a href="https://www.granelli-lab.org/staff/fabrizio-granelli">Fabrizio Granelli</a>
+  </p>
+</p>
+<br>
 
-This repository contains the following folders:
-1. [/ryu-controller-solution](./ryu-controller-solution): using RYU changes an initial physical string topology to a logical ring topology
-2. [/ryu-controller-one-file](./ryu-controller-one-file): using RYU changes an initial physical string topology to a logical ring topology (all in one executable file)
-3. [/ryu-controller-router](./ryu-controller-router): using RYU changes and a VirtualHost (Router) an initial physical string topology to a logical ring topology
-4. [/routing-tables-solution](/routing-tables-solution): 
+### Docker
 
-## Topology Scheme ##
-![Topology](topology.png)
+This solutions demonstrates how to use a docker image of a [OVS Switch](https://hub.docker.com/r/openvswitch/ovs) inside Dockerhost instance.
+The Dockerhost with internal Docker containers deployed is used to simulate an OVS Switch. 
 
-## Ryu-controller-solution ##
-### How to Run ###
-You can simple run the emulation applications with following commands in ./ryu-controller-solution/SDN
-Enabling Ryu controller to load the application and to run background:
-```
-$ ryu-manager controller_ring.py &
-```
-or in alternative:
-```
-$ ryu-manager controller_string.py &
-```
-Starting the network with Mininet:
-```
-$ sudo python3 topology.py
-```
+<hr>
+
+### Hub
+
+This solutions demonstrates how to use an Host acting like an OVS Switch.
+The host acts like an Hub, simply forwarding packets from one port to the other.
 
 
-### How to verify ###
-There are several modes to verify the results:
-1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
-2.  
-
-
-## Ryu-controller-one-file ##
-### How to Run ###
-You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
-Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
-```
-$ sudo python3 main.py
-```
-### How to verify ###
-Same of /ryu-controller-solution's verify process.
-
-## Ryu-controller-router ##
-### How to Run ###
-You can simply run the emulation applications with following commands in ./ryu-controller-router/SDN
-Enabling Ryu controller to load the application and to run background:
-```
-$ ryu-manager controller_ring.py &
-```
-or in alternative:
-```
-$ ryu-manager controller_string.py &
-```
-Starting the network with Mininet:
-```
-$ sudo python3 topology.py
-```
-### How to verify ###
-
-## Routing-tables-solution ##
-### How to Run ###
-You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
-Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
-```
-$ sudo python3 main.py
-```
-### How to verify ###
-Same of /ryu-controller-solution's verify process.
