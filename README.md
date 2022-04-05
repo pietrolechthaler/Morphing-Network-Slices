@@ -5,8 +5,8 @@
   <h2 align="center">Morphing Network Slicing</h2>
 
   <p align="center">
-    Softwarized and Virtualized Mobile Networks
-  <br>
+  Exam project for Softwarized and Virtualized Mobile Networks 
+  <br>University of Trento - Prof. <a href="https://www.granelli-lab.org/staff/fabrizio-granelli">Fabrizio Granelli</a>
   </p>
 </p>
 <br>
@@ -36,7 +36,7 @@ git clone https://github.com/pietrolechthaler/UniTn-MorphingNetworkSlices
 
 <hr>
 
-### Intallation
+### Installation
 
 After downloading all the files and installing the [ComNetsEmu](https://git.comnets.net/public-repo/comnetsemu/-/tree/master) virtual emulator.
 
