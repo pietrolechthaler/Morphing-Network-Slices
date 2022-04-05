@@ -63,7 +63,7 @@ UniTn-MorphingNetworkSlices
 
 ### Routing-tables-solution ###
 You can simple run the emulation applications with following commands in ./ryu-controller-one-file
-Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
+<br>Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
 ```
 $ cd routing-tables-solution
 $ sudo python3 main.py
@@ -75,7 +75,6 @@ There are several modes to verify the results:
 ### Ryu-controller-solution
 
 You can simple run the emulation applications with following commands in ./ryu-controller-solution/SDN
-
 <br>Enabling Ryu controller to load the application and to run background:
 
 ```
@@ -100,7 +99,7 @@ There are several modes to verify the results:
 
 ### Ryu-controller-one-file
 You can simple run the emulation applications with following commands in ./ryu-controller-one-file/
-Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
+<br>Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
 ```
 $ cd ryu-controller-one-file
 $ sudo python3 main.py
@@ -111,7 +110,7 @@ There are several modes to verify the results:
 
 ### Virtual-host-solution
 You can simply run the emulation applications with following commands in ./virtual-host-solution/
-Enabling Ryu controller to load the application and to run background:
+<br>Enabling Ryu controller to load the application and to run background:
 <br>
 ```
 $ cd Virtual-host-solution/SDN
