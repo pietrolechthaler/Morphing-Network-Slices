@@ -62,9 +62,10 @@ UniTn-MorphingNetworkSlices
 <hr>
 
 ### Routing-tables-solution ###
-You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
+You can simple run the emulation applications with following commands in ./ryu-controller-one-file
 Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
 ```
+$ cd routing-tables-solution
 $ sudo python3 main.py
 ```
 There are several modes to verify the results:
@@ -78,14 +79,17 @@ You can simple run the emulation applications with following commands in ./ryu-c
 <br>Enabling Ryu controller to load the application and to run background:
 
 ```
+$ cd ryu-controller-solution/SDN
 $ ryu-manager controller_ring.py &
 ```
 or in alternative:
 ```
+$ cd ryu-controller-solution/SDN
 $ ryu-manager controller_string.py &
 ```
 Starting the network with Mininet:
 ```
+$ cd ryu-controller-solution
 $ sudo python3 topology.py
 ```
 
@@ -95,9 +99,10 @@ There are several modes to verify the results:
 
 
 ### Ryu-controller-one-file
-You can simple run the emulation applications with following commands in ./ryu-controller-one-file/SDN
+You can simple run the emulation applications with following commands in ./ryu-controller-one-file/
 Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
 ```
+$ cd ryu-controller-one-file
 $ sudo python3 main.py
 ```
 There are several modes to verify the results:
@@ -105,23 +110,25 @@ There are several modes to verify the results:
 2.  
 
 ### Virtual-host-solution
-You can simply run the emulation applications with following commands in ./ryu-controller-router/SDN
+You can simply run the emulation applications with following commands in ./virtual-host-solution/
 Enabling Ryu controller to load the application and to run background:
+<br>
+* **Switch**
 ```
-$ ryu-manager controller_ring.py &
+$ cd Virtual-host-solution/Switch_version/SDN
+$ ryu-manager controller.py &
 ```
-or in alternative:
+
+* **Hub (not working)**
 ```
-$ ryu-manager controller_string.py &
+$ cd Virtual-host-solution/Hub_version/SDN
+$ ryu-manager controller.py &
 ```
 Starting the network with Mininet:
 ```
+$ cd Virtual-host-solution/<VERSION>/SDN
 $ sudo python3 topology.py
 ```
-There are several modes to verify the results:
-1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
-2.  
-
 <hr>
 
 ### Contributors
