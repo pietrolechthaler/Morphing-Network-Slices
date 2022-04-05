@@ -70,15 +70,14 @@ UniTn-MorphingNetworkSlices
 <hr>
 
 ### Routing-tables-solution ###
-You can simple run the emulation applications with following commands in ./ryu-controller-one-file
+You can simply run the emulation applications with following commands in ./ryu-controller-one-file
 <br>Starting the network with an ad-hoc class created to deploy the net and the controller, using topology and slice controller classes:
 ```
 $ cd routing-tables-solution
 $ sudo python3 main.py
 ```
 There are several modes to verify the results:
-1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
-2.  
+-- GIACOMO --
 
 ### Ryu-controller-solution
 
@@ -101,8 +100,8 @@ $ sudo python3 topology.py
 ```
 
 There are several modes to verify the results:
-1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
-2.  
+1.  Flow table router: ``` $:sudo ovs-ofctl dump-flows s1 ```
+2.  try ping all:  ```  mininet> pingall``` : this should work fine with string topology and show an X when reaching H2 in ring topology (since we excluded that Switch)
 
 
 ### Ryu-controller-one-file
@@ -113,8 +112,8 @@ $ cd ryu-controller-one-file
 $ sudo python3 main.py
 ```
 There are several modes to verify the results:
-1.  Flow table router: ``` $ mininet> sh ovs-ofctl dump-flows s1 ```
-2.  
+2.  try ping all:  ```  mininet> pingall``` : this should work fine with string topology and show an X when reaching H2 in ring topology (since we excluded that Switch)
+Since this example is running on one file only, after exiting the first example you'll go to the second one and the pingall comand should work differently!
 
 ### Virtual-host-solution
 You can simply run the emulation applications with following commands in ./virtual-host-solution/
@@ -129,7 +128,9 @@ Starting the network with Mininet:
 $ cd Virtual-host-solution
 $ sudo python3 topology.py
 ```
-
+There are several modes to verify the results:
+1.  Flow table router: ``` $:sudo ovs-ofctl dump-flows s1 ```
+2.  try ping all:  ```  mininet> pingall``` : this should work fine with string topology and show an X when reaching H2 in ring topology (since we excluded that Switch)
 <hr>
 
 ### Contributors
