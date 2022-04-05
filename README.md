@@ -22,14 +22,18 @@
 
 ### Description
 
+
+<a href="">
+<img src="https://github.com/pietrolechthaler/UniTn-MorphingNetworkSlices/blob/main/topology.png">
+</a>
+
 In this project the goal is to show how a topology can be dynamically changed using a RYU SDN controller.
-
-<img src=https://www.researchgate.net/profile/Pooja-Kharga/publication/274780573/figure/fig3/AS:294733386665986@1447281323289/Linear-topology-of-4-switches-with-one-host-per-switch.png=>
-
 We use the same underlying topology, as shown in the picture, to demonstrate that RYU SDN Controllers can also be used to morph the logical view of the slice.
 For clarity we use the same topologies, both physical and logical in all of our examples and test cases, so that the focus can be drawn to the proof of concept of the slice morphing and not on the topology itself.
 
 Only one example "cheats" this rule by adding new devices, but is well documented in the topology file itslef of the virtual host solution.
+8
+Furthermore, all the changes in topology are static since we encountered some major issues with the flow tables in mininet, forcing us this way (the router solution, since it doesn't use flow tables but routing tables, works dynamically instead), this and other issues are well documented in the related files.
 
 <hr>
 
