@@ -49,7 +49,7 @@ cd UniTn-MorphingNetworkSlices
 
 ### Usage 
 
-This repository contains the following folders which contain **four different implementations of the solution** and a **testing folder** with some ideas of possible solutions.
+This repository contains the following folders which contain **four different implementations of the solution** and a **[testing folder](https://github.com/pietrolechthaler/UniTn-MorphingNetworkSlices/tree/main/testing)** with some ideas of possible solutions.
 
 ```
 UniTn-MorphingNetworkSlices
