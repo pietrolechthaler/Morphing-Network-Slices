@@ -2,14 +2,6 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 
-#ROBE, brought to you by Matteino Gattino
-''' if(index==4):            #set default gateaway nei router
-        reteAnello="41"
-    else:
-        reteAnello=str(index)+str(index+1)
-    defaultRoute='via 10.0.'+(reteAnello)+'.2'
-'''
-
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
 from mininet.node import Controller, OVSBridge, OVSKernelSwitch
@@ -21,9 +13,12 @@ def addRoute(router, remote, nexthop, intf):
 
 class SlicController():
     def __init__(self):
+        info("[SC] init\n")
         pass
     
     def morph(self, net, physicalTopo, virtualTopo, count):
+        info("[SC] morph\n")
+        # Rimozione routing tables pre-esistenti
         for i in range(1, count+1):
             name = "r" + str(i)
             routes = net[name].cmd("ip route")
@@ -32,6 +27,7 @@ class SlicController():
                 if l.find("via") > 0:
                     net[name].cmd("ip route del " + l)
         
+        # Configurazione routing tables per morph da string OR ring TO string
         if (physicalTopo == "string" or physicalTopo == "ring") and virtualTopo == "string":
             for i in range(1, count+1):
                 router = net.get("r" + str(i))
@@ -51,10 +47,12 @@ class SlicController():
                     remote = "10.0." + str(j-1)+str(j) + ".0/24"
                     addRoute(router, remote, nexthop, intf)
 
+        # Configurazione routing tables per morph da string TO ring
         elif physicalTopo == "string" and virtualTopo == "ring":
             #morph, eventuale collapse di un router
             pass
 
+        # Configurazione routing tables per morph da ring TO ring
         elif physicalTopo == "ring" and virtualTopo == "ring":
             for i in range(1, count+1):
                 router = net.get("r" + str(i))
