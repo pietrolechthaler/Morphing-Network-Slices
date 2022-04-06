@@ -25,7 +25,7 @@ if __name__ == "__main__":
     
 
     info("#### --- TOPOLOGIA A STRINGA --- ####\n")
-    os.system('ryu-manager ./SDN\ controller/controller_string.py &') 
+    os.system('ryu-manager ./SDN/controller_string.py &') 
     netController = NetController(4, "string")
     netController.start()
     netController.CLI()
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     os.system('./clean.sh')             #script to clean the network with sudo mn -c, also closes active dockers since we initially used them
 
     info("\n\n#### --- TOPOLOGIA AD ANELLO --- ####\n")
-    os.system('ryu-manager ./SDN\ controller/controller_ring.py &') 
+    os.system('ryu-manager ./SDN/controller_ring.py &') 
     netController = NetController(4, "string")
     netController.start()
     netController.CLI()
