@@ -13,6 +13,7 @@ from mininet.topo import Topo
 from mininet.cli import CLI
 
 from topoController import *
+from slicController import *
 
 def addHost(net,name,index):
     return net.addHost(
@@ -40,13 +41,11 @@ class NetController():
         info("[NC] init\n")
         
         self.count = count
-        #info("A\n")
+        info("A\n")
         self.net = Mininet(link=TCLink, switch=OVSKernelSwitch, topo=EmptyTopo(), build=False)
-        #info("B\n")
-        c0 = RemoteController("c0", ip="127.0.0.1", port=6633)
-        #info("C\n")
-        self.net.addController(c0)
-        #info("D\n")
+        info("B\n")
+        self.net.addController("c0")
+        info("C\n")
 
         self.topo = TopoController()
         self.slic = SlicController()
@@ -73,7 +72,7 @@ class NetController():
         self.net.start()
 
         # Morping the virtual
-        self.slic.morph(self.net, "string", "ring", self.count)
+        #self.slic.morph(self.net, "string", "ring", self.count)
         #self.slic.collapseRouter(self.net, 2)
         #self.slic.morph(self.net, "ring", "ring", self.count)
         #self.test()
