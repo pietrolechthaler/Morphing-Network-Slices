@@ -21,35 +21,29 @@ class ExampleSwitch13(app_manager.RyuApp):
 
     def __init__(self, *args, **kwargs):
         super(ExampleSwitch13, self).__init__(*args, **kwargs)
-        # initialize mac address table.
+        # initialize mac address table, empty.
         self.mac_to_port = {}
         print("Controller starting up\n")
         time.sleep(10)
 
-        check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 down'),universal_newlines=True)  #down porte estreme collegate agli hub
+        #we shut down the links to the "virtual hosts" from s1, s3 and s4 so that those links are not used
+        check_output(shlex.split('sudo ovs-ofctl mod-port s1 3 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s4 3 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s1 4 down'),universal_newlines=True)
         check_output(shlex.split('sudo ovs-ofctl mod-port s3 4 down'),universal_newlines=True)
         
         time.sleep(5)
-        switches = ['s1','s2','s3','s4']    #cancello eventuali match sbagliati dovuti al collegamento iniziale con gli hub
+        #we clear eventual flows learned in the meantime and also mac to port pairings, then we proceed with the standard string controller procedure
+        #of letting the switches learn by themselves
+        switches = ['s1','s2','s3','s4']
         for switch in switches:
             check_output(shlex.split('sudo ovs-ofctl del-flows {} udp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} tcp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} icmp'.format(switch)),universal_newlines=True)
         self.mac_to_port = {}
 
-        print("TOPOLOGIA A STRINGA S1-S2-S3-S4")
-        #print("------------")
-        # print(check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:01,actions=output:1'),universal_newlines=True))    #dump table pre cancellazione
-        # print(check_output(shlex.split('sudo ovs-ofctl dump-flows s2'),universal_newlines=True))    #dump table pre cancellazione
-        # print(check_output(shlex.split('sudo ovs-ofctl dump-flows s3'),universal_newlines=True))    #dump table pre cancellazione
-        # print(check_output(shlex.split('sudo ovs-ofctl dump-flows s4'),universal_newlines=True))    #dump table pre cancellazione
-        # print("-------------")
-       
-       # self.monitor_thread = hub.spawn(self.change)
+        print("STRING TOPOLOGY S1-S2-S3-S4")
 
-    #def change(self):
        
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -96,10 +90,9 @@ class ExampleSwitch13(app_manager.RyuApp):
 
         # get the received port number from packet_in message.
         in_port = msg.match['in_port']
-
-        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
+        
+        #if destination mac address is in mac address table --> results = 1
         results=0
-        # learn a mac address to avoid FLOOD next time.
         
 
         # if the destination mac address is already learned,
@@ -115,7 +108,6 @@ class ExampleSwitch13(app_manager.RyuApp):
 
         # install a flow to avoid packet_in next time.
         if (out_port != ofproto.OFPP_FLOOD):
-            #if ((self.mode == "RING" and results==1) or self.mode == "STRING"):
             match = parser.OFPMatch(in_port=in_port, eth_dst=dst)
             self.add_flow(datapath, 1, match, actions)
 

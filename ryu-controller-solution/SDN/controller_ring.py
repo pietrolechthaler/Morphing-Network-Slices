@@ -71,7 +71,7 @@ class ExampleSwitch13(app_manager.RyuApp):
         # get the received port number from packet_in message.
         in_port = msg.match['in_port']
 
-        self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
+        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
 
         # results = 0 means destination mac address is not in the mac address table
         # results = 1 means destination mac address is in the mac address table
@@ -96,7 +96,7 @@ class ExampleSwitch13(app_manager.RyuApp):
             elif(dpid==4):
                 out_port=1
             else:
-                self.logger.info("nessuna delle opzioni")
+                #self.logger.info("nessuna delle opzioni")
                 out_port = ofproto.OFPP_FLOOD
                 
 

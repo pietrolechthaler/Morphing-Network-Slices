@@ -27,66 +27,37 @@ class ExampleSwitch13(app_manager.RyuApp):
             2: {"00:00:00:00:00:02": 1},
             3: {"00:00:00:00:00:03": 1},
             4: {"00:00:00:00:00:04": 1},
-        }        
-        #self.monitor_thread = hub.spawn(self.change)
+        }
+
         print("Controller starting up\n")
         time.sleep(10)
+        
+        #we shut down the ports of s2 and also the links that connect s1 and s3 to it
+        #therefore "cutting off" S2 from the logical view of the network.
 
-        check_output(shlex.split('sudo ovs-ofctl mod-port s2 3 down'),universal_newlines=True)  #down porte s2 e porte altri switch collegati a s2
+        check_output(shlex.split('sudo ovs-ofctl mod-port s2 3 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s2 2 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s2 1 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s3 2 down'),universal_newlines=True)  
         check_output(shlex.split('sudo ovs-ofctl mod-port s1 2 down'),universal_newlines=True)  
-
-
         
         time.sleep(5)
-        switches = ['s1','s2','s3','s4']    #cancello eventuali match sbagliati dovuti al collegamento iniziale con gli hub
+        
+        #we clear eventual flows learned in the meantime and also mac to port pairings, then we proceed with the standard ring controller procedure
+        switches = ['s1','s2','s3','s4']
         for switch in switches:
             check_output(shlex.split('sudo ovs-ofctl del-flows {} udp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} tcp'.format(switch)),universal_newlines=True)
             check_output(shlex.split('sudo ovs-ofctl del-flows {} icmp'.format(switch)),universal_newlines=True)
-        print("TOPOLOGIA AD ANELLO S1-S2-S3-S4")
+        
         self.mac_to_port = {
             1: {"00:00:00:00:00:01": 1},
             2: {"00:00:00:00:00:02": 1},
             3: {"00:00:00:00:00:03": 1},
             4: {"00:00:00:00:00:04": 1},
         }
-        print("------------")
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:01,actions=output:1'),universal_newlines=True) #s1
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:02,actions=output:2'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:03,actions=output:2'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:04,actions=output:2'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:05,actions=drop'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s1 dl_dst=00:00:00:00:00:06,actions=drop'),universal_newlines=True)
 
-        
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s2 dl_dst=00:00:00:00:00:01,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s2 dl_dst=00:00:00:00:00:02,actions=output:1'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s2 dl_dst=00:00:00:00:00:03,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s2 dl_dst=00:00:00:00:00:04,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s2 dl_dst=00:00:00:00:00:05,actions=drop'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s2 dl_dst=00:00:00:00:00:06,actions=drop'),universal_newlines=True)
-
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s3 dl_dst=00:00:00:00:00:01,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s3 dl_dst=00:00:00:00:00:02,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s3 dl_dst=00:00:00:00:00:03,actions=output:1'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s3 dl_dst=00:00:00:00:00:04,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s3 dl_dst=00:00:00:00:00:05,actions=drop'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s3 dl_dst=00:00:00:00:00:06,actions=drop'),universal_newlines=True)
-
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s4 dl_dst=00:00:00:00:00:01,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s4 dl_dst=00:00:00:00:00:02,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s4 dl_dst=00:00:00:00:00:03,actions=output:3'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s4 dl_dst=00:00:00:00:00:04,actions=output:1'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s4 dl_dst=00:00:00:00:00:05,actions=drop'),universal_newlines=True)
-        # check_output(shlex.split('sudo ovs-ofctl add-flow s4 dl_dst=00:00:00:00:00:06,actions=drop'),universal_newlines=True)
-
-        print("-------------")
-
-   # def change(self):
-        
+        print("STAR TOPOLOGY S1-S2-S3-S4")
 
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
@@ -135,39 +106,29 @@ class ExampleSwitch13(app_manager.RyuApp):
         # get the received port number from packet_in message.
         in_port = msg.match['in_port']
 
-        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, in_port)
+        #if destination mac address is in mac address table --> results = 1
         results=0
-        # learn a mac address to avoid FLOOD next time.
-        #self.mac_to_port[dpid][src] = in_port
-
+    
         # if the destination mac address is already learned,
         # decide which port to output the packet, otherwise FLOOD.
         if dst in self.mac_to_port[dpid]:
-            #self.logger.info("MAC: sono dentro %s %s %s %s", dpid, src, dst, in_port)
             out_port = self.mac_to_port[dpid][dst]
             results=1
         else:
             if(dpid==1):
-                out_port=4 #h6 --> hub tra s1 e s3
-            #     #self.logger.info("1. packet in %s %s %s %s", dpid, src, dst, in_port)
+                out_port=4 #to s6
             elif(dpid==2):
-                out_port=1 #solo per evitare comportamenti scorretti
-            #     #self.logger.info("2. packet in %s %s %s %s", dpid, src, dst, in_port)
+                out_port=1 #just to avoid random things from happening
             elif(dpid==3):
-                out_port=3 #s4
-            #     #self.logger.info("3. packet in %s %s %s %s", dpid, src, dst, in_port)
+                out_port=3 #to s4
             elif(dpid==4):
-                 out_port=3 #h5 --> hub tra s4 e s1
-            #     #self.logger.info("4. packet in %s %s %s %s", dpid, src, dst, in_port)
+                 out_port=3 #to s5
             elif(dpid==5):
-                 out_port=1 #h5 --> hub tra s4 e s1
-            #     #self.logger.info("4. packet in %s %s %s %s", dpid, src, dst, in_port)
+                 out_port=1 #to s1
             elif(dpid==6):
-                 out_port=2 #h5 --> hub tra s4 e s1
-            #     #self.logger.info("4. packet in %s %s %s %s", dpid, src, dst, in_port)
+                 out_port=2 #to s3
             else:
                 return
-                #self.logger.info("NN. packet in %s %s %s %s", dpid, src, dst, in_port)
 
         # construct action list.
         actions = [parser.OFPActionOutput(out_port)]

@@ -1,84 +1,70 @@
+#!/usr/bin/python3
+
+from mininet.topo import Topo
 from mininet.net import Mininet
-from mininet.node import Controller, RemoteController, OVSController
-from mininet.node import CPULimitedHost, Host, Node
-from mininet.node import OVSKernelSwitch, UserSwitch
+from mininet.node import OVSKernelSwitch, RemoteController
 from mininet.cli import CLI
-from mininet.log import setLogLevel, info
-from mininet.link import TCLink, Intf
-from _thread import start_new_thread
-import os, stat
-import json
-import time
-import csv
-import requests
-import sys
+from mininet.link import TCLink
 
 
-def four_switches_network():
-    http_link_config = dict(bw=1)
-    net = Mininet(topo=None,
+class NetworkSlicingTopo(Topo):
+    def __init__(self):
+        # Initialize topology
+        Topo.__init__(self)
+
+        # Create template host, switch, and link
+        host_config = dict(inNamespace=True)
+        http_link_config = dict(bw=1)
+        host_link_config = dict()
+
+        # Create switch nodes
+        for i in range(4):
+            sconfig = {"dpid": "%016x" % (i + 1)}
+            self.addSwitch("s%d" % (i + 1), **sconfig)
+
+        # Create host nodes
+        self.addHost('h1', mac='00:00:00:00:00:01')
+        self.addHost('h2', mac='00:00:00:00:00:02')
+        self.addHost('h3', mac='00:00:00:00:00:03')
+        self.addHost('h4', mac='00:00:00:00:00:04')
+        
+        #Create virtual host
+        self.addSwitch("s5")
+        self.addSwitch("s6")
+
+        #Add switch links
+        self.addLink("h1", "s1")
+        self.addLink("h2", "s2")
+        self.addLink("h3", "s3")
+        self.addLink("h4", "s4")
+
+        #Add host links
+        self.addLink("s1", "s2")
+        self.addLink("s2", "s3")
+        self.addLink("s3", "s4")
+        
+        #Add virtual host links
+        self.addLink("s1", "s5")
+        self.addLink("s4", "s5")
+        self.addLink("s1", "s6")
+        self.addLink("s3", "s6")
+
+
+topos = {"networkslicingtopo": (lambda: NetworkSlicingTopo())}
+
+if __name__ == "__main__":
+    topo = NetworkSlicingTopo()
+    net = Mininet(
+        topo=topo,
         switch=OVSKernelSwitch,
         build=False,
         autoSetMacs=True,
         autoStaticArp=True,
-        link=TCLink)
-                   
-
-    info('*** Add switches\n')
-    h1 = net.addHost('h1', mac='00:00:00:00:00:01')
-    h2 = net.addHost('h2', mac='00:00:00:00:00:02')
-    h3 = net.addHost('h3', mac='00:00:00:00:00:03')
-    h4 = net.addHost('h4', mac='00:00:00:00:00:04')
-
-    # h5 = net.addHost('h5', mac='00:00:00:00:00:05')
-    # h6 = net.addHost('h6', mac='00:00:00:00:00:06')
-
-
-    s1 = net.addSwitch("s1")
-    s2 = net.addSwitch("s2")
-    s3 = net.addSwitch("s3")
-    s4 = net.addSwitch("s4")
-
-    s5 = net.addSwitch("s5")
-    s6 = net.addSwitch("s6")
-
-    net.addLink("h1", "s1")
-    net.addLink("h2", "s2")
-    net.addLink("h3", "s3")
-    net.addLink("h4", "s4")
-
-    net.addLink("s1", "s2")
-    net.addLink("s2", "s3")
-    net.addLink("s3", "s4")
-    
-    net.addLink("s1", "s5")
-    net.addLink("s4", "s5")
-    net.addLink("s1", "s6")
-    net.addLink("s3", "s6")
-
-    info('*** Starting network\n')
+        link=TCLink,
+    )
     controller = RemoteController("c1", ip="127.0.0.1", port=6633)
     net.addController(controller)
     net.build()
     net.start()
-    # h5.cmd("ifconfig h5-eth0 0")
-    # h5.cmd("ifconfig h5-eth1 0")
-    # h5.cmd("brctl addbr br0")
-    # h5.cmd("brctl addif br0 h5-eth0")
-    # h5.cmd("brctl addif br0 h5-eth1")
-    # h5.cmd("ifconfig br0 up")
-
-    # h6.cmd("ifconfig h6-eth0 0")
-    # h6.cmd("ifconfig h6-eth1 0")
-    # h6.cmd("brctl addbr br0")
-    # h6.cmd("brctl addif br0 h6-eth0")
-    # h6.cmd("brctl addif br0 h6-eth1")
-    # h6.cmd("ifconfig br0 up")
-
     CLI(net)
     net.stop()
-
-
-if __name__ == '__main__':
-    setLogLevel('info')
-four_switches_network()
