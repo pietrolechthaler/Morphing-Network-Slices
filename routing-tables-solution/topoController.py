@@ -8,25 +8,25 @@ from mininet.node import Controller, OVSBridge, OVSKernelSwitch
 from mininet.topo import Topo
 from mininet.cli import CLI
 
-from slicController import *
-
+# Classe "dummy" per controllare manualmente il net controller
 class EmptyTopo(Topo):
     def build(self):
         pass
         
 class TopoController():
     def __init__(self):
-        info("[TC] instance init\n")
-        
+        info("[TC] init\n")
         
     
-    def morph(self, net, topology,index):
+    def morph(self, net, topology, index):
         info("[TC] morphing to " + str(topology) + "\n")
 
+        # Rimozione links pre-esistenti
         links = net.links
         for i in range(len(net.links)-1, -1, -1):
             net.delLink(net.links[i])
 
+        # Allestimento link topologia a stella
         if topology == "star": 
             id="r1"
             router=net.get(id)
@@ -36,8 +36,8 @@ class TopoController():
                     intfName2=id+"-eth"+str(i),
                     params2={'ip':'10.0.'+str(i+1)+'.254/24'}
                 )
-                
- 
+
+        # Allestimento link topologia a stringa
         elif topology == "string":
             for i in range(0, index):
                 id="r"+str(i+1)
@@ -58,6 +58,7 @@ class TopoController():
                     params2={'ip':'10.0.'+idrete+'.2/24'}
                 )
 
+        # Allestimento link topologia ad anello
         elif topology == "ring":  
             for i in range(0, index):
                 id="r"+str(i+1)
@@ -77,7 +78,6 @@ class TopoController():
                     intfName2=id2+"-eth2",
                     params2={'ip':'10.0.'+idrete+'.2/24'}
                 )
-
             idrete = str(index)+str(1)
             id1="r"+str(index)
             id2="r"+str(1)

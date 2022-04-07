@@ -5,8 +5,9 @@
 '''
                    ┌───────┐
                    │ Main  │◄────── Events
-                   └───┬───┘        - User
-                       │            - Timers
+                   └───┬───┘        - Timers
+                       |            - Users
+                       │
                        ▼
                ┌───────────────┐
                │ NetController │
@@ -19,11 +20,6 @@
            │                      │
            │                      │
    Physical topology       Virtual topology
-           │                      │
-           │                      │
-           │      ┌─────────┐     │
-           └─────►│ Network │◄────┘
-                  └─────────┘
  '''
 
 import os
@@ -33,31 +29,15 @@ from netController import *
 if __name__ == "__main__":
 
     setLogLevel("info")
-    ''''
-    netController = NetController(4)
 
-    netController.start()
-    #netController.print()
+    # Inizializzazione NETCONTROLLER a 4 hosts
+    netController = NetController(3)
 
-    info("####CHANGE####\n")
-    #netController.change()
-    #netController.test()
-    netController.deployDockerHost(5)
+    # Avvio NETCRONTROLLER
     netController.start()
 
-
-    info("####TEST####\n")
-    #info(str(dir(netController.net.switches[0])))    
-    netController.test()
+    # Avvio istanza terminale al NETCONTROLLER
     netController.CLI()
 
-    info("####CLEANUP####\n")
-    os.system('sudo ./clean.sh') 
-    #TODO: capire come mai non funziona la fermata di c0
-    #netController.stop()
-    '''
-
-    netController = NetController(4)
-    netController.start()
-    netController.CLI()
+    # Arresto NETCRONTROLLER
     netController.stop()
