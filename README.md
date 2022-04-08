@@ -77,7 +77,9 @@ $ cd routing-tables-solution
 $ sudo python3 main.py
 ```
 There are several modes to verify the results:
--- GIACOMO --
+1.  Flow table router: ```  mininet> r1 ip route ```
+2.  Try ping all: ```  mininet> pingall ```
+3.  Flow dump: ```  mininet> dump flows ```
 
 ### Ryu-controller-solution
 
