@@ -128,12 +128,14 @@ You can simply run the emulation applications with following commands in ./virtu
 $ cd Virtual-host-solution/SDN
 $ ryu-manager controller.py &
 ```
-Starting the network with Mininet:
+Then, starting the network with Mininet:
 ```
 $ cd Virtual-host-solution
 $ sudo python3 topology.py
 ```
-There are several modes to verify the results:
+
+NOTE: Do this step of launching the net a couple of seconds after having launched the controller, when some debug text has started printing in that terminal (the controller is active and waiting for the net) to make sure this works properly.
+There are several modes to verify the results, just wait for the messagge "STRING/RING TOPOLOGY" so that the network is correctly configured:
 1.  Flow table router: ``` $:sudo ovs-ofctl dump-flows s1 ```
 2.  try ping all:  ```  mininet> pingall``` : this should work fine with string topology and show an X when reaching H2 in ring topology (since we excluded that Switch)
 <hr>
