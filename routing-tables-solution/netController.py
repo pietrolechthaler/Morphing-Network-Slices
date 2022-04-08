@@ -71,13 +71,14 @@ class NetController():
         # Starting the network
         self.net.start()
 
+        # First morph
+        self.slic.morph(self.net, "ring", "ring", self.count)
+
+        # Second morph
         self.slic.morph(self.net, "ring", "string", self.count)
         
         #self.slic.collapseRouter(self.net, 2)
-        #self.slic.morph(self.net, "ring", "ring", self.count)
         #self.test()
-        #info("\n\n\n")
-        #self.slic.morph2(self.net, "string", "string", self.count)
 
     def stop(self):
         info("[NC] stop\n")
