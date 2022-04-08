@@ -63,16 +63,16 @@ class NetController():
         # - string
         # - start
         # - ring
-        self.topo.morph(self.net, "string", self.count)
+        self.topo.morph(self.net, "ring", self.count)
 
         # Building the network
-        self.net.build()
+        self.net.build()        
 
         # Starting the network
         self.net.start()
 
-        # Morping the virtual
-        #self.slic.morph(self.net, "string", "ring", self.count)
+        self.slic.morph(self.net, "ring", "string", self.count)
+        
         #self.slic.collapseRouter(self.net, 2)
         #self.slic.morph(self.net, "ring", "ring", self.count)
         #self.test()

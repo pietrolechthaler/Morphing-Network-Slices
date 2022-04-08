@@ -31,7 +31,7 @@ if __name__ == "__main__":
     setLogLevel("info")
 
     # Inizializzazione NETCONTROLLER a 4 hosts
-    netController = NetController(3)
+    netController = NetController(4)
 
     # Avvio NETCRONTROLLER
     netController.start()
