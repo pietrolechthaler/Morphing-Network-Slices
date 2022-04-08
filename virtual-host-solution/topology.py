@@ -7,7 +7,6 @@ from mininet.cli import CLI
 from mininet.link import TCLink
 
 
-<<<<<<< Updated upstream
 class NetworkSlicingTopo(Topo):
     def __init__(self):
         # Initialize topology
@@ -52,51 +51,6 @@ class NetworkSlicingTopo(Topo):
 
 
 topos = {"networkslicingtopo": (lambda: NetworkSlicingTopo())}
-=======
-def four_switches_network():
-    http_link_config = dict(bw=1)
-    net = Mininet(topo=None,
-        switch=OVSKernelSwitch,
-        build=False,
-        autoSetMacs=True,
-        autoStaticArp=True,
-        link=TCLink)
-                   
-    # Create host nodes
-    info('*** Add switches\n')
-    h1 = net.addHost('h1', mac='00:00:00:00:00:01')
-    h2 = net.addHost('h2', mac='00:00:00:00:00:02')
-    h3 = net.addHost('h3', mac='00:00:00:00:00:03')
-    h4 = net.addHost('h4', mac='00:00:00:00:00:04')
-
-
-    # Create switch nodes
-    s1 = net.addSwitch("s1")
-    s2 = net.addSwitch("s2")
-    s3 = net.addSwitch("s3")
-    s4 = net.addSwitch("s4")
-
-    # Create virtual host nodes
-    s5 = net.addSwitch("s5")
-    s6 = net.addSwitch("s6")
-
-    # Add host links
-    net.addLink("h1", "s1")
-    net.addLink("h2", "s2")
-    net.addLink("h3", "s3")
-    net.addLink("h4", "s4")
-    
-    # Add switch links
-    net.addLink("s1", "s2")
-    net.addLink("s2", "s3")
-    net.addLink("s3", "s4")
-    
-    # Add virtual host links
-    net.addLink("s1", "s5")
-    net.addLink("s4", "s5")
-    net.addLink("s1", "s6")
-    net.addLink("s3", "s6")
->>>>>>> Stashed changes
 
 if __name__ == "__main__":
     topo = NetworkSlicingTopo()
