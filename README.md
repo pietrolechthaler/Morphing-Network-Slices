@@ -3,11 +3,6 @@
     <img src="https://github.com/pietrolechthaler/UniTn-MorphingNetworkSlices/blob/main/logo.png">
   </a>
   <h2 align="center">Morphing Network Slicing</h2>
-
-  <p align="center">
-  Exam project for Softwarized and Virtualized Mobile Networks 
-  <br>University of Trento - Prof. <a href="https://www.granelli-lab.org/staff/fabrizio-granelli">Fabrizio Granelli</a>
-  </p>
 </p>
 <br>
 
